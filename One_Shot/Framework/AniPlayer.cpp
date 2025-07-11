@@ -42,7 +42,6 @@ void AniPlayer::SetOrigin(const sf::Vector2f& newOrigin)
 
 void AniPlayer::Init()
 {
-	animator.SetTarget(&body);
 
 	animator.AddEvent("Idle", 0,
 		[]()
@@ -65,9 +64,7 @@ void AniPlayer::Release()
 
 void AniPlayer::Reset()
 {
-	TEXTURE_MGR.Load("graphics/niko.png");
-	ANI_CLIP_MGR.Load("animations/idleNico.csv");
-	body.setTexture(TEXTURE_MGR.Get("graphics/niko.png"));
+
 
 	animator.SetTarget(&body); // 애니메이터에 연결
 	animator.Play("animations/idleNico.csv"); // 재생할 애니메이션
@@ -76,7 +73,12 @@ void AniPlayer::Reset()
 	SetRotation(0.f);
 	velocity = { 0.f, 0.f };
 	isGrounded = true;
-	
+
+
+	std::cout << animator.GetCurrentClipId() << std::endl;
+
+	animator.SetTarget(&body);
+
 }
 
 void AniPlayer::Update(float dt)
@@ -84,6 +86,7 @@ void AniPlayer::Update(float dt)
 	animator.Update(dt);
 
 	float h = 0.f;
+
 	if (isGrounded)
 	{
 		h = InputMgr::GetAxis(Axis::Horizontal);

@@ -1,0 +1,24 @@
+ID,FPS,"LoopType (0: Single, 1: Loop)",,,
+Idle,10,1,,,
+,,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT,"FLIPX (0:False, 1:True)"
+graphics/red_start.png,0,0,120,120,0
+graphics/red_start.png,120,0,120,120,0
+graphics/red_start.png,240,0,120,120,0
+graphics/red_start.png,360,0,120,120,0
+graphics/red_start.png,480,0,120,120,0
+graphics/red_start.png,600,0,120,120,0
+graphics/red_start.png,720,0,120,120,0
+graphics/red_start.png,840,0,120,120,0
+graphics/red_start.png,960,0,120,120,0
+graphics/red_start.png,1080,0,120,120,0
+graphics/red_start.png,1200,0,120,120,0
+graphics/red_start.png,1320,0,120,120,0
+graphics/red_start.png,1440,0,120,120,0
+graphics/red_start.png,1560,0,120,120,0
+graphics/red_start.png,1680,0,120,120,0
+graphics/red_start.png,1800,0,120,120,0
+graphics/red_start.png,1920,0,120,120,0
+graphics/red_start.png,2040,0,120,120,0
+graphics/red_start.png,2160,0,120,120,0
+graphics/red_start.png,2280,0,120,120,0

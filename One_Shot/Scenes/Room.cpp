@@ -10,26 +10,24 @@ Room::Room() :Scene(SceneIds::Room)
 
 void Room::Init()
 {
-
 	texIds.push_back("graphics/niko.png");
 	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
-
+	
 	ANI_CLIP_MGR.Load("animations/idleNico.csv");
 
-	TextGo* go = new TextGo("resources/fonts/DS-DIGIT.ttf");
-	go->SetString("Room");
-	go->SetCharacterSize(30);
-	go->SetFillColor(sf::Color::White);
-	go->sortingLayer = SortingLayers::UI;
-	go->sortingOrder = 0;
+	//TextGo* go = new TextGo("resources/fonts/DS-DIGIT.ttf");
+	//go->SetString("Room");
+	//go->SetCharacterSize(30);
+	//go->SetFillColor(sf::Color::White);
+	//go->sortingLayer = SortingLayers::UI;
+	//go->sortingOrder = 0;
 
-	AddGameObject(go);
+	//AddGameObject(go);
 
 	AniPlayer* player=(new AniPlayer("player"));
 	player->SetPosition({ 0.f,-200.f });
-	player->Reset();
 	AddGameObject(player);
-
+	Scene::Init();
 }
 void Room::Enter()
 {
@@ -45,6 +43,7 @@ void Room::Enter()
 }
 void Room::Update(float dt)
 {
+	Scene::Update(dt);
 	
 }
 void Room::Draw(sf::RenderWindow& window)

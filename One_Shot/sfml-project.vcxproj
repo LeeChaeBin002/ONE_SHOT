@@ -165,6 +165,7 @@
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="Framework\Variables.cpp" />
     <ClCompile Include="Scenes\Title.cpp" />
+    <ClCompile Include="TileManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\AniPlayer.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Framework\Variables.h" />
     <ClInclude Include="Scenes\Title.h" />
     <ClInclude Include="Scenes\TitleScene.h" />
+    <ClInclude Include="TileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

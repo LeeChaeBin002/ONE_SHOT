@@ -2,7 +2,7 @@ ID,FPS,"LoopType (0: Single, 1: Loop)		",,,
 idle,10,"1	",,,
 "				",,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT,"FLIPX (0:Fale, 1:True)"
-graphics/niko.png,0,0,48,64,0
-graphics/niko.png,48,0,48,64,0
-graphics/niko.png,96,0,48,64,0
-graphics/niko.png,144,0,48,64,0
+graphics/niko.png,0,64,48,64,0
+graphics/niko.png,48,64,48,64,0
+graphics/niko.png,96,64,48,64,0
+graphics/niko.png,144,64,48,64,0

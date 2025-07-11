@@ -24,7 +24,7 @@ void Animator::init()
 	
 
 	// 예: 텍스처 매니저에 필요한 텍스처 미리 로드
-	TEXTURE_MGR.Load("graphics/niko.png");
+	//TEXTURE_MGR.Load("graphics/niko.png");
 	
 	//TEXTURE_MGR.Load("animations/idleNico.csv"); // 만약 텍스처라면
 
