@@ -3,7 +3,8 @@
 #include <fstream>
 #include <sstream>
 
-bool TileManager::Load(const std::string& imagePath, const std::string& csvPath) {
+bool TileManager::Load(const std::string& imagePath, const std::string& csvPath)
+{
     if (!texture.loadFromFile(imagePath))
         return false;
 
@@ -34,18 +35,29 @@ bool TileManager::Load(const std::string& imagePath, const std::string& csvPath)
         int h = std::stoi(sh);
 
         tileRects[id] = sf::IntRect(x, y, w, h);
-    }
 
-    return true;
+        // 충돌 처리: Wall 또는 특정 카테고리는 충돌 타일로 간주
+        if (category.find("Wall") != std::string::npos || category == "Furniture") {
+            collidableTiles.insert(id);
+        }
+
+        return true;
+    }
 }
 
-sf::Sprite TileManager::GetSprite(const std::string& name) {
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
+    sf::Sprite TileManager::GetSprite(const std::string & name) 
+    {
+        sf::Sprite sprite;
+        sprite.setTexture(texture);
 
-    if (tileRects.find(name) != tileRects.end()) {
-        sprite.setTextureRect(tileRects[name]);
+        if (tileRects.find(name) != tileRects.end()) {
+            sprite.setTextureRect(tileRects[name]);
+        }
+
+        return sprite;
     }
+    
 
-    return sprite;
-}
+    bool TileManager::IsCollidable(const std::string& name) const {
+        return collidableTiles.find(name) != collidableTiles.end();
+    }

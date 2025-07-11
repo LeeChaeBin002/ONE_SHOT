@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
+#include "Room.h"
 
 
 void SceneMgr::Init()
@@ -9,7 +10,8 @@ void SceneMgr::Init()
 	scenes.push_back(new Room());
 	scenes.push_back(new Setting());
 	scenes.push_back(new Stage1());
-
+	
+	ChangeScene(SceneIds::Room);
 
 	for (auto scene : scenes)
 	{

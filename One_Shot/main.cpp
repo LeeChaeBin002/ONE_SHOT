@@ -12,7 +12,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Tile Loader Example");
 
     TileManager tileMgr;
-    if (!tileMgr.Load("resources/red_start.png", "resources/tile_objects_red_start.csv")) {
+    if (!tileMgr.Load("maps/red_start.png", "maps/room.csv")) {
         return -1;
     }
 

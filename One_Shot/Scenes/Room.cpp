@@ -37,8 +37,20 @@ void Room::Enter()
 	uiView.setCenter(center);
 	worldView.setSize(size);
 	worldView.setCenter({ 0.f, -200.f });
+	//tileManager
+	if (!tileMgr.Load("maps/red_start.png", "maps/room.csv"))
+	{
+		std::cerr << "타일 로드 실패!" << std::endl;
+		return;
+	}
 
-	Scene::Enter();
+	wall = tileMgr.GetSprite("Red Wall Tile");
+	bed = tileMgr.GetSprite("Bed (Pillow + Blanket)");
+
+	wall.setPosition(100.f, 100.f);
+	bed.setPosition(140.f, 100.f);
+
+	//Scene::Enter();
 
 }
 void Room::Update(float dt)
@@ -49,6 +61,8 @@ void Room::Update(float dt)
 void Room::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+	window.draw(wall);
+	window.draw(bed);
 }
 void Room::screenchange(const std::string& msg)
 {
