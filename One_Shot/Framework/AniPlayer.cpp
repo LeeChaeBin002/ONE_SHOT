@@ -69,7 +69,7 @@ void AniPlayer::Reset()
 	
 
 
-	SetPosition({ 0.f, 0.f });
+	position={ 0.f, 0.f };
 	SetScale({ 1.f, 1.f });
 	SetRotation(0.f);
 	velocity = { 0.f, 0.f };

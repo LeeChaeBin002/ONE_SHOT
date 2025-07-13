@@ -36,6 +36,8 @@ void Scene::Enter()
 	TEXTURE_MGR.Load(texIds);
 	FONT_MGR.Load(fontIds);
 	SOUNDBUFFER_MGR.Load(soundIds);
+	
+	ApplyPendingChanges();
 
 	for (auto obj : gameObjects)
 	{
@@ -44,8 +46,16 @@ void Scene::Enter()
 
 	for (auto obj : objectsToAdd)
 	{
-		obj->Reset();
+		if (obj->GetName() == "Player") {
+			obj->SetPosition(sf::Vector2f(100, 200));
+			std::cout << "Player position set to: " << obj->GetPosition().x << ", " << obj->GetPosition().y << std::endl;
+		}
+		else if (obj->GetName() == "Item") {
+			obj->SetPosition(sf::Vector2f(300, 150));
+		
+		}
 	}
+
 }
 
 void Scene::Exit()

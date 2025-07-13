@@ -9,6 +9,7 @@ protected:
     sf::Sprite spriteMode;
     TileManager tileManager;
     sf::Sprite background;
+    bool positionSet = false;
    // sf::Sprite playerSprite
    //Animator animator;
     TextGo* screen;
