@@ -2,9 +2,10 @@
 #include "GameObject.h"
 class Player :
     public GameObject
-{protected:
+{
+protected:
     sf::Sprite body;
-    std::string TexId = "graphics/niko.png";
+    std::string TexId = "graphics/Characters/niko.png";
 
    
 public:

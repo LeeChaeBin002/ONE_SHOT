@@ -11,12 +11,15 @@ Room::Room() :Scene(SceneIds::Room)
 void Room::Init()
 {
 
-	texIds.push_back("graphics/niko.png");
+	texIds.push_back("graphics/Characters/niko.png");
 	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+	// 이때 한 번만 로드
+	if (!ANI_CLIP_MGR.Exists("idleNico")) // 존재 확인 후 로드
+	{
+		ANI_CLIP_MGR.Load("animations/idleNico.csv");
+	}
 
-	ANI_CLIP_MGR.Load("animations/idleNico.csv");
-
-	TextGo* go = new TextGo("resources/fonts/DS-DIGIT.ttf");
+	TextGo* go = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
 	go->SetString("Room");
 	go->SetCharacterSize(30);
 	go->SetFillColor(sf::Color::White);
@@ -45,8 +48,9 @@ void Room::Enter()
 }
 void Room::Update(float dt)
 {
-	
+	Scene::Update(dt);
 }
+
 void Room::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);

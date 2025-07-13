@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "AniPlayer.h"
+#include "Animator.h"
 
 AniPlayer::AniPlayer(const std::string& name)
 	: GameObject(name)
@@ -43,20 +44,6 @@ void AniPlayer::SetOrigin(const sf::Vector2f& newOrigin)
 void AniPlayer::Init()
 {
 	animator.SetTarget(&body);
-
-	animator.AddEvent("Idle", 0,
-		[]()
-		{
-			std::cout << "!!" << std::endl;
-		}
-	);
-
-	animator.AddEvent("Idle", 0,
-		[]()
-		{
-			std::cout << "??" << std::endl;
-		}
-	);
 }
 
 void AniPlayer::Release()
@@ -64,82 +51,87 @@ void AniPlayer::Release()
 }
 
 void AniPlayer::Reset()
+
 {
-	TEXTURE_MGR.Load("graphics/niko.png");
+	body.setOrigin(24.f, 32.f); // 48 / 2, 64 / 2
+	TEXTURE_MGR.Load("graphics/Characters/niko.png");
+	body.setTexture(TEXTURE_MGR.Get("graphics/Characters/niko.png"));
+	body.setTextureRect(sf::IntRect(0, 0, 48, 64)); // x, y, width, height
+
 	ANI_CLIP_MGR.Load("animations/idleNico.csv");
-	body.setTexture(TEXTURE_MGR.Get("graphics/niko.png"));
+	ANI_CLIP_MGR.Load("animations/runRight.csv");
+	ANI_CLIP_MGR.Load("animations/runLeft.csv");
+	ANI_CLIP_MGR.Load("animations/runDown.csv");
+	ANI_CLIP_MGR.Load("animations/runUp.csv");
 
 	animator.SetTarget(&body); // 애니메이터에 연결
-	animator.Play("animations/idleNico.csv"); // 재생할 애니메이션
+	animator.Play("idle");
+	
+
+
 	SetPosition({ 0.f, 0.f });
 	SetScale({ 1.f, 1.f });
 	SetRotation(0.f);
 	velocity = { 0.f, 0.f };
-	isGrounded = true;
-	
+
+
 }
 
 void AniPlayer::Update(float dt)
 {
-	animator.Update(dt);
 
-	float h = 0.f;
-	if (isGrounded)
-	{
-		h = InputMgr::GetAxis(Axis::Horizontal);
-		velocity.x = h * speed;
-	}
-	if (isGrounded && InputMgr::GetKeyDown(sf::Keyboard::Space))
-	{
-		isGrounded = false;
-		velocity.y = -250.f;
-		animator.Play("animations/jump.csv");
-	}
-	if (!isGrounded)
-	{
-		velocity += gravity * dt;
-	}
+	//animator.Update(dt);
+
+	float h = InputMgr::GetAxis(Axis::Horizontal);
+	float v = InputMgr::GetAxis(Axis::Vertical);
+	velocity.x = h * speed;
+	velocity.y = v * speed;
+
 	position += velocity * dt;
-	if (position.y > 0.f)
-	{
-		velocity.y = 0.f;
-		position.y = 0.f;
-		isGrounded = true;
-	}
 	SetPosition(position);
 
-	if (h != 0.f)
+
+
+	// Animation timing
+	animationTime += dt;
+	const float frameDuration = 0.1f; // 시간당 프레임 변경 속도 (초)
+	if (animationTime >= frameDuration)
 	{
-		SetScale(h > 0.f ? sf::Vector2f(1.0f, 1.0) : sf::Vector2f(- 1.f, 1.0f));
+		animationTime = 0.f;
+		currentFrame = (currentFrame + 1) % 4; // 4프레임 순환
 	}
 
-	// Ani
-	if (animator.GetCurrentClipId() == "Idle")
+	int frameX = currentFrame * 48;
+	int frameY = 0;
+
+	if (h > 0)
 	{
-		if (h != 0.f)
-		{
-			animator.Play("animations/run.csv");
-		}
+		SetScale({ -1.f, 1.f });
+		frameY = 64; // Right
 	}
-	else if (animator.GetCurrentClipId() == "Run")
+	else if (h < 0)
 	{
-		if (h == 0.f)
-		{
-			animator.Play("animations/idle.csv");
-		}
+		SetScale({ 1.f, 1.f });
+		frameY = 64; // Left (반전)
 	}
-	else if (animator.GetCurrentClipId() == "Jump" && isGrounded)
+	else if (v < 0)
 	{
-		if (h == 0.f)
-		{
-			animator.Play("animations/idle.csv");
-		}
-		else
-		{
-			animator.Play("animations/run.csv");
-		}
+		frameY = 192; // Up row
 	}
+	else if (v > 0)
+	{
+		frameY = 0; // Down row
+	}
+	
+	else
+	{
+		frameX = 0;
+		frameY = 0; // Idle
+	}
+
+	body.setTextureRect(sf::IntRect(frameX, frameY, 48, 64));
 }
+
 
 void AniPlayer::Draw(sf::RenderWindow& window)
 {

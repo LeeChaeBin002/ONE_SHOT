@@ -74,7 +74,7 @@ public:
 		{
 			if (!Load(id))
 			{
-				std::cerr << "2Failed to load resource: " << id << std::endl;
+				std::cerr << "1Failed to load resource: " << id << std::endl;
 			}
 		}
 		
