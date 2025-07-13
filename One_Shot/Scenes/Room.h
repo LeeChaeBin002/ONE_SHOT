@@ -1,11 +1,14 @@
 #pragma once
 #include "Scene.h"
+#include "TileManager.h"
 class Room :
     public Scene
 {
 protected:
     sf::Sprite spritetitle;
     sf::Sprite spriteMode;
+    TileManager tileManager;
+    sf::Sprite background;
    // sf::Sprite playerSprite
    //Animator animator;
     TextGo* screen;
