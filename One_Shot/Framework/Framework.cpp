@@ -2,6 +2,7 @@
 #include "Framework.h"
 #include <iostream>
 #include <windows.h>
+#include <filesystem>
 
 void Framework::Init(int w, int h, const std::string& t)
 { 
@@ -12,11 +13,11 @@ void Framework::Init(int w, int h, const std::string& t)
 	window.create(sf::VideoMode(w, h), t);
     texIds = {
         "graphics/Characters/niko.png",
-        
+  
     };
 
     fontIds = {
-        "resources/fonts/NotoSansKR-Light.ttf"
+        "resources/fonts/TerminusTTF-Bold.ttf"
     };
     soundIds = {
         "Audio/BGM/ToSleep.ogg"
@@ -30,7 +31,8 @@ void Framework::Init(int w, int h, const std::string& t)
     {
         if (!FONT_MGR.Exists(id))
         {
-            std::cerr << "폰트 로드 실패 확인: " << id << std::endl;
+           
+           FONT_MGR.Load("resources/fonts/TerminusTTF-Bold.ttf");    
         }
     }
 
@@ -42,6 +44,7 @@ void Framework::Init(int w, int h, const std::string& t)
 
 void Framework::Do()
 {
+   
 
     while (window.isOpen())
     {

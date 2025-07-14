@@ -24,6 +24,7 @@ enum class SceneIds
 	Title,
 	Mode,
 	Room,
+	Computer,
 	Setting,
 	Stage1,
 	Count,

@@ -65,6 +65,9 @@ void TextGo::SetOrigin(Origins preset)
 
 void TextGo::Init()
 {
+
+	text.setFont(FONT_MGR.Get(fontId));
+	Utils::SetOrigin(text, originPreset);
 }
 
 void TextGo::Release()

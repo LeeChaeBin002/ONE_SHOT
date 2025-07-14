@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
 #include "Room.h"
+#include "Computer.h"
 
 
 void SceneMgr::Init()
@@ -8,6 +9,7 @@ void SceneMgr::Init()
 	scenes.push_back(new Title());
 	scenes.push_back(new Mode());
 	scenes.push_back(new Room());
+	scenes.push_back(new Computer());
 	scenes.push_back(new Setting());
 	scenes.push_back(new Stage1());
 	

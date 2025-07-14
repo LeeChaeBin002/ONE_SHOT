@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Computer.cpp" />
     <ClCompile Include="Framework\AniPlayer.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Scenes\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Computer.h" />
     <ClInclude Include="Framework\AniPlayer.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
@@ -189,7 +191,9 @@
     <ClInclude Include="Framework\SoundMgr.h" />
     <ClInclude Include="Scenes\Setting.h" />
     <ClInclude Include="Scenes\Stage1.h" />
-    <ClInclude Include="stdafx.h" />
+    <CopyFileToFolders Include="stdafx.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </CopyFileToFolders>
     <ClInclude Include="Framework\TextGo.h" />
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="Framework\Variables.h" />
@@ -197,7 +201,11 @@
     <ClInclude Include="Scenes\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="..\sfml-project-bin\resources\fonts\NotoSansKR-Light.ttf" />
+    <CopyFileToFolders Include="..\sfml-project-bin\resources\fonts\TerminusTTF-Bold.ttf">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
