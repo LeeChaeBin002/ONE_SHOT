@@ -155,7 +155,6 @@
     <ClCompile Include="Framework\SpriteGo.cpp" />
     <ClCompile Include="Framework\Scene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scenes\Room.cpp" />
     <ClCompile Include="Scenes\Mode.cpp" />
     <ClCompile Include="Framework\SceneMgr.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="Framework\Singleton.h" />
     <ClInclude Include="Framework\SpriteGo.h" />
     <ClInclude Include="Framework\Scene.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Scenes\Room.h" />
     <ClInclude Include="Scenes\Mode.h" />
     <ClInclude Include="Framework\SceneMgr.h" />
@@ -197,6 +195,9 @@
     <ClInclude Include="Framework\Variables.h" />
     <ClInclude Include="Scenes\Title.h" />
     <ClInclude Include="Scenes\TitleScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\sfml-project-bin\resources\fonts\NotoSansKR-Light.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

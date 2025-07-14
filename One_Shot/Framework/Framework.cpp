@@ -1,8 +1,14 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Framework.h"
+#include <iostream>
+#include <windows.h>
 
 void Framework::Init(int w, int h, const std::string& t)
-{
+{ 
+    // 현재 실행 파일의 경로 출력
+    char path[MAX_PATH];
+    GetCurrentDirectoryA(MAX_PATH, path);
+    std::cout << "Current Working Directory: " << path << std::endl;
 	window.create(sf::VideoMode(w, h), t);
     texIds = {
         "graphics/Characters/niko.png",
@@ -10,7 +16,7 @@ void Framework::Init(int w, int h, const std::string& t)
     };
 
     fontIds = {
-        "resources/fonts/TerminusTTF-Bold.ttf"
+        "resources/fonts/NotoSansKR-Light.ttf"
     };
     soundIds = {
         "Audio/BGM/ToSleep.ogg"
@@ -20,6 +26,14 @@ void Framework::Init(int w, int h, const std::string& t)
 	FONT_MGR.Load(fontIds);
 	SOUNDBUFFER_MGR.Load(soundIds);
 
+    for (const auto& id : fontIds)
+    {
+        if (!FONT_MGR.Exists(id))
+        {
+            std::cerr << "폰트 로드 실패 확인: " << id << std::endl;
+        }
+    }
+
     Utils::Init();
 	InputMgr::Init();
     SOUND_MGR.Init();
@@ -28,6 +42,7 @@ void Framework::Init(int w, int h, const std::string& t)
 
 void Framework::Do()
 {
+
     while (window.isOpen())
     {
         sf::Time dt = clock.restart();
@@ -43,6 +58,12 @@ void Framework::Do()
             InputMgr::UpdateEvent(event);
             if (event.type == sf::Event::Closed)
                 window.close();
+            // 마우스 이동 이벤트 감지
+            if (event.type == sf::Event::MouseMoved)
+            {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                std::cout << "Mouse Position: (" << mousePos.x << ", " << mousePos.y << ")" << std::endl;
+            }
         }
 
         InputMgr::Update(deltaTime);

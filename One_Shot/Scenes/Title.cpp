@@ -44,7 +44,7 @@ void Title::Enter()
 	const sf::Font& font = FONT_MGR.Get("resources/fonts/TerminusTTF-Bold.ttf");
 	if (FONT_MGR.IsEmpty(font))
 	{
-		std::cerr << "폰트 로딩 실패: fonts/zombiecontrol.ttf" << std::endl;
+		std::cerr << "폰트 로딩 실패: --" << std::endl;
 	}
 	else
 	{

@@ -1,9 +1,9 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Room.h"
-#include "Player.h"
 #include "AniPlayer.h"
 #include "SpriteGo.h"
 #include "SoundMgr.h"
+#pragma execution_character_set("utf-8")
 
 
 Room::Room() :Scene(SceneIds::Room)
@@ -17,7 +17,7 @@ void Room::Init()
 	texIds.push_back("graphics/Tilesets/niko_room.png");
 	texIds.push_back("graphics/Icons/item_start_remote.png");
 	texIds.push_back("graphics/Characters/niko.png");
-	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+	fontIds.push_back("resources/fonts/NotoSansKR-Light.ttf");
 	// �̶� �� ���� �ε�
 	if (!ANI_CLIP_MGR.Exists("idleNico")) // ���� Ȯ�� �� �ε�
 	{
@@ -32,14 +32,21 @@ void Room::Init()
 	remote->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
 	AddGameObject(remote);
 
-	TextGo* go = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+	TextGo* go = new TextGo("resources/fonts/NotoSansKR-Light.ttf");
 	go->SetString("Room");
 	go->SetCharacterSize(30);
 	go->SetFillColor(sf::Color::White);
 	go->sortingLayer = SortingLayers::UI;
 	go->sortingOrder = 0;
 
-	//AddGameObject(go);
+	messageText = new TextGo("resources/fonts/NotoSansKR-Light.ttf");
+
+	messageText->SetCharacterSize(24);
+	messageText->SetFillColor(sf::Color::White);
+	messageText->SetPosition({ 50.f, 50.f }); // 적당한 화면 좌표
+	messageText->sortingLayer = SortingLayers::UI;
+	messageText->sortingOrder = 1;
+	AddGameObject(messageText);
 
 	player = new AniPlayer("player");
 	player->SetPosition({ 0.f,100.f });
@@ -59,6 +66,7 @@ void Room::Enter()
 	Scene::Enter();
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
 
+	messageText->SetString("");
 	bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/ToSleep.ogg"));
 	bgm.setLoop(true);
 	bgm.play();
@@ -82,6 +90,7 @@ void Room::Enter()
 }
 void Room::Update(float dt)
 {// ù ��° Update������ ��ġ ����
+	//messageText->SetString("창문 밖에 뭔가 보인다");
 	if (!positionSet)
 	{
 		for (auto obj : gameObjects)
@@ -97,7 +106,18 @@ void Room::Update(float dt)
 		}
 		positionSet = true;
 	}
+
 	CheckItempickup();
+
+	if (hasRemote)
+	{
+		sf::Vector2f playerPos = player->GetPosition();
+		if (playerPos.x >= 390 && playerPos.x <= 444 &&
+			playerPos.y >= 160 && playerPos.y <= 163)
+		{
+			ShowMessage("hint:2817");
+		}
+	}
 	Scene::Update(dt);
 }
 
@@ -117,7 +137,12 @@ void Room::Draw(sf::RenderWindow& window)
 	window.setView(uiView);
 
 	Scene::Draw(window);
-	
+
+	if (messageText != nullptr && messageText->GetActive())
+	{
+		messageText->Draw(window);
+	}
+
 	window.setView(defaultView);
 	
 }
@@ -148,8 +173,18 @@ void Room::CheckItempickup()
 			if (playerBounds.intersects(itemBounds))
 			{
 				obj->SetActive(false); // 아이템 비활성화
+				hasRemote = true;
 				std::cout << "item1 get!" << std::endl;
 			}
 		}
+	}
+
+}
+
+void Room::ShowMessage(const std::string& msg)
+{
+	if (messageText)
+	{
+		messageText->SetString(msg);
 	}
 }

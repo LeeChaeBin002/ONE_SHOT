@@ -47,6 +47,10 @@ public:
 		if (!success)
 		{
 			std::cerr << "Failed to load resource: " << id << std::endl;
+			if constexpr (std::is_same_v<T, sf::Font>)
+			{
+				std::cerr << "폰트 로드 실패: " << id << std::endl;
+			}
 			delete res;
 			return false;
 		}
