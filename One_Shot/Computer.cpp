@@ -10,7 +10,15 @@ Computer::Computer() :Scene(SceneIds::Computer)
 }
 void Computer::Init()
 {
-
+    passwordText = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+    passwordText->Init();
+    passwordText->SetString("PassWord: ");
+    passwordText->SetCharacterSize(30);
+    passwordText->SetFillColor(sf::Color::White);
+    passwordText->SetPosition({ 150.f, 350.f });
+    passwordText->sortingLayer = SortingLayers::UI;
+    passwordText->sortingOrder = 1;
+    AddGameObject(passwordText);
 
     texIds.push_back("graphics/Pictures/cg_desktop_no_effects.png");
     fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
@@ -38,16 +46,7 @@ void Computer::Init()
     computerScreen->SetOrigin(Origins::TL);
     computerScreen->SetPosition({ 0.f, 0.f });
     AddGameObject(computerScreen);
-    // UI에 텍스트 예시 추가
-    TextGo* Text = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
-    Text->Init();
-    Text->SetString("PassWord: ");
-    Text->SetCharacterSize(30);
-    Text->SetFillColor(sf::Color::White);
-    Text->SetPosition({ 150.f, 350.f });
-    Text->sortingLayer = SortingLayers::UI;  // 이 줄 추가!
-    Text->sortingOrder = 1;
-    AddGameObject(Text);
+    
 }
 void Computer::Enter()
 {
@@ -89,14 +88,56 @@ void Computer::Enter()
 }
 void Computer::Update(float dt)
 {
-    if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
+
+    // 1~9 숫자키 입력 체크
+    for (int num = 1; num <= 9; ++num)
     {
-        SCENE_MGR.ChangeScene(SceneIds::Room);  // ESC 누르면 방으로 돌아감
+        if (InputMgr::GetKeyDown(static_cast<sf::Keyboard::Key>(sf::Keyboard::Num1 + num - 1)))
+        {
+            
+
+
+
+
+            if (passwordInput.size() < passwordLength)
+            {
+                passwordInput += std::to_string(num);
+               
+                passwordText->SetString("PassWord: " + passwordInput);
+
+                if (passwordInput.size() == passwordLength)
+                {
+
+
+                    // TODO: 비밀번호 확인 로직
+                    if (passwordInput == "2817")  // 예시: 정답
+                    {
+                        std::cout << "비밀번호 정답!" << std::endl;
+                        ShowMessage("Passwored Success!");
+                    }
+                    else
+                    {
+                        std::cout << "비밀번호 틀림!" << std::endl;
+                        ShowMessage("Password Failed!");
+                    }
+
+                    passwordInput.clear();  // 다시 입력받기
+                  
+                }
+            }
+        }
+
+
+        if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
+        {
+            SCENE_MGR.ChangeScene(SceneIds::Room);  // ESC 누르면 방으로 돌아감
+        }
+
+
     }
-
-    Scene::Update(dt);
-
+        Scene::Update(dt);
 }
+
 void Computer::Draw(sf::RenderWindow& window)
 {
     Scene::Draw(window);
@@ -108,5 +149,12 @@ void Computer::Exit()
     std::cout << "Computer UI Scene Exited" << std::endl;
 }
 
+void Computer::ShowMessage(const std::string& msg)
+{
+    if (passwordText)
+    {
+        passwordText->SetString(msg);
+    }
+}
 
 
