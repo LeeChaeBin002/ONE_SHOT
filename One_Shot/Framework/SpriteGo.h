@@ -9,7 +9,7 @@ protected:
 
 public:
 	SpriteGo(const std::string& texPlayerId = "", const std::string& name = "");
-	~SpriteGo() override = default;
+	virtual ~SpriteGo() override = default;
 
 	const std::string& GetTextureId() const { return textureId; }
 	void SetTextureId(const std::string& texPlayerId) { textureId = texPlayerId; }
@@ -28,5 +28,6 @@ public:
 	void Reset() override;
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+	sf::FloatRect GetGlobalBounds()const override;
 };
 

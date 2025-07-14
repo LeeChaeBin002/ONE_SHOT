@@ -1,5 +1,6 @@
 #pragma once
 #include "Animator.h"
+#include "GameObject.h"
 
 class AniPlayer : public GameObject
 {
@@ -30,5 +31,6 @@ public:
 
 	void SetOrigin(Origins preset) override;
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
+	sf::FloatRect GetGlobalBounds()const override;
 
 };

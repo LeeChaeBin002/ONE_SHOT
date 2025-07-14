@@ -10,29 +10,6 @@ int main()
     FRAMEWORK.Do();
     FRAMEWORK.Release();
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Tile Loader Example");
-
-    TileManager tileMgr;
-    if (!tileMgr.Load("maps/red_start.png", "maps/room.csv")) {
-        return -1;
-    }
-
-    sf::Sprite wall = tileMgr.GetSprite("Red Wall Tile");
-    sf::Sprite bed = tileMgr.GetSprite("Bed (Pillow + Blanket)");
-
-    wall.setPosition(100, 100);
-    bed.setPosition(140, 100);
-
-    while (window.isOpen()) {
-        sf::Event e;
-        while (window.pollEvent(e)) {
-            if (e.type == sf::Event::Closed) window.close();
-        }
-
-        window.clear();
-        window.draw(wall);
-        window.draw(bed);
-        window.display();
-    }
-    return 0;
+    
+  
 }

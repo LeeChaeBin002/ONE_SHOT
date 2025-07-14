@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TextGo.h"
+#include "SpriteGo.h"
 
 TextGo::TextGo(const std::string& fontId, const std::string& name)
 	: GameObject(name), fontId(fontId)

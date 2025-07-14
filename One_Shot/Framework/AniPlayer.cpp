@@ -142,3 +142,7 @@ void AniPlayer::Draw(sf::RenderWindow& window)
 	}
 		window.draw(body);
 }
+sf::FloatRect AniPlayer::GetGlobalBounds()const
+{
+	return body.getGlobalBounds();
+}

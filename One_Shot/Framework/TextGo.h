@@ -7,6 +7,7 @@ protected:
 	sf::Text text;
 	std::string fontId;
 
+
 public:
 	TextGo(const std::string& fontId = "", const std::string& name = "");
 	~TextGo() override = default;
@@ -33,4 +34,6 @@ public:
 	void Reset() override;
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+	
+
 };

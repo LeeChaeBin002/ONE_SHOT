@@ -67,3 +67,7 @@ void SpriteGo::Draw(sf::RenderWindow& window)
 		window.draw(sprite);
 	}
 }
+sf::FloatRect SpriteGo::GetGlobalBounds()const
+{
+	return sprite.getGlobalBounds();
+}

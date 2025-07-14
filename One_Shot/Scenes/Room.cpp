@@ -40,11 +40,12 @@ void Room::Init()
 
 	//AddGameObject(go);
 
-	AniPlayer* player=(new AniPlayer("player"));
+	player = new AniPlayer("player");
 	player->SetPosition({ 0.f,100.f });
 	player->Reset();
 	AddGameObject(player);
 	Scene::Init();
+	
 }
 void Room::Enter()
 {
@@ -93,6 +94,7 @@ void Room::Update(float dt)
 		}
 		positionSet = true;
 	}
+	CheckItempickup();
 	Scene::Update(dt);
 }
 
@@ -121,5 +123,25 @@ void Room::screenchange(const std::string& msg)
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 	{
 		SCENE_MGR.ChangeScene(SceneIds::Title);
+	}
+}
+
+void Room::CheckItempickup()
+{
+	if (!player) return;
+
+	for (auto obj : gameObjects)
+	{
+		if (obj->GetName() == "item1" && obj->GetActive())
+		{
+			sf::FloatRect playerBounds = player->GetGlobalBounds();
+			sf::FloatRect itemBounds = obj->GetGlobalBounds();
+
+			if (playerBounds.intersects(itemBounds))
+			{
+				obj->SetActive(false); // 아이템 비활성화
+				std::cout << "item get!" << std::endl;
+			}
+		}
 	}
 }
