@@ -24,7 +24,9 @@ void Computer::Init()
     fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
     // 컴퓨터 화면 이미지 추가
     SpriteGo* computerScreen = new SpriteGo("graphics/Pictures/cg_desktop_no_effects.png", "ComputerScreen");
-    
+    bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/pc_messagebox.wav"));
+    bgm.setLoop(false);
+    bgm.play();
     const sf::Texture* texture = computerScreen->GetSprite().getTexture();
     //sf::Vector2f center = FRAMEWORK.GetWindowSizeF() * 0.5f;
 
@@ -51,6 +53,9 @@ void Computer::Init()
 void Computer::Enter()
 {
     Scene::Enter();
+    bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/pc_messagebox.wav"));
+    bgm.setLoop(false);
+    bgm.play();
 
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
@@ -75,8 +80,6 @@ void Computer::Enter()
             }
         }
     }
-
-
     uiView.setSize(size);
     uiView.setCenter(center);
     worldView.setSize(size);
@@ -94,11 +97,6 @@ void Computer::Update(float dt)
     {
         if (InputMgr::GetKeyDown(static_cast<sf::Keyboard::Key>(sf::Keyboard::Num1 + num - 1)))
         {
-            
-
-
-
-
             if (passwordInput.size() < passwordLength)
             {
                 passwordInput += std::to_string(num);
@@ -113,7 +111,7 @@ void Computer::Update(float dt)
                     if (passwordInput == "2817")  // 예시: 정답
                     {
                         std::cout << "비밀번호 정답!" << std::endl;
-                        ShowMessage("Passwored Success!");
+                        ShowMessage("Password Success!");
                     }
                     else
                     {
@@ -132,8 +130,6 @@ void Computer::Update(float dt)
         {
             SCENE_MGR.ChangeScene(SceneIds::Room);  // ESC 누르면 방으로 돌아감
         }
-
-
     }
         Scene::Update(dt);
 }
@@ -149,6 +145,10 @@ void Computer::Exit()
     std::cout << "Computer UI Scene Exited" << std::endl;
 }
 
+void Computer::Release()
+{
+    bgm.stop();
+}
 void Computer::ShowMessage(const std::string& msg)
 {
     if (passwordText)

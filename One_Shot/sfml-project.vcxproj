@@ -155,6 +155,7 @@
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\SpriteGo.cpp" />
     <ClCompile Include="Framework\Scene.cpp" />
+    <ClCompile Include="LivingRoom.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scenes\Room.cpp" />
     <ClCompile Include="Scenes\Mode.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Framework\Singleton.h" />
     <ClInclude Include="Framework\SpriteGo.h" />
     <ClInclude Include="Framework\Scene.h" />
+    <ClInclude Include="LivingRoom.h" />
     <ClInclude Include="Scenes\Room.h" />
     <ClInclude Include="Scenes\Mode.h" />
     <ClInclude Include="Framework\SceneMgr.h" />

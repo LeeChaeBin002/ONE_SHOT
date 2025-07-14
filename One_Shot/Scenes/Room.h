@@ -20,6 +20,7 @@ protected:
     TextGo* screen;
     TextGo* clickStart;
     SceneIds changeScene = SceneIds::Setting;
+
 public:
     Room();
     ~Room() override = default;

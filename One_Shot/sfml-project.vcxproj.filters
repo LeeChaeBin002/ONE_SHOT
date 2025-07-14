@@ -81,6 +81,9 @@
     <ClCompile Include="Computer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="LivingRoom.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\InputMgr.h">
@@ -156,6 +159,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Computer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LivingRoom.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

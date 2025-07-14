@@ -25,6 +25,7 @@ enum class SceneIds
 	Mode,
 	Room,
 	Computer,
+	LivingRoom,
 	Setting,
 	Stage1,
 	Count,

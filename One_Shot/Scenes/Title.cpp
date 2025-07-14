@@ -2,6 +2,7 @@
 #include "Title.h"
 #include "SpriteGO.h"
 #include "ResourceMgr.h"
+
 void Title::screenchange(const std::string& msg)
 {
 	if (screen == nullptr) // Check if modetitle is initialized
