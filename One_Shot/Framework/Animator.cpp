@@ -21,12 +21,9 @@ void Animator::AddEvent(const std::string& id, int frame, std::function<void()> 
 
 void Animator::init()
 {
-	
+	// ï¿½ï¿½: ï¿½Ø½ï¿½Ã³ ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½Ì¸ï¿½ ï¿½Îµï¿½
+	TEXTURE_MGR.Load("graphics/Characters/niko.png");
 
-	// ¿¹: ÅØ½ºÃ³ ¸Å´ÏÀú¿¡ ÇÊ¿äÇÑ ÅØ½ºÃ³ ¹Ì¸® ·Îµå
-	//TEXTURE_MGR.Load("graphics/niko.png");
-	
-	//TEXTURE_MGR.Load("animations/idleNico.csv"); // ¸¸¾à ÅØ½ºÃ³¶ó¸é
 
 }
 
@@ -34,7 +31,7 @@ void Animator::Update(float dt)
 {
 	if (sprite == nullptr) {
 		std::cerr << "Error: sprite is nullptr!" << std::endl;
-		return; // È¤Àº ¿¹¿Ü Ã³¸®
+		return; // È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 	}
 	
 	if (!isPlaying)
@@ -85,8 +82,18 @@ void Animator::Update(float dt)
 
 void Animator::Play(const std::string& clipId, bool clearQueue)
 {
-	Play(&ANI_CLIP_MGR.Get(clipId), clearQueue);
+	//Play(&ANI_CLIP_MGR.Get(clipId), clearQueue);
+	AnimationClip& clip = ANI_CLIP_MGR.Get(clipId);
+	if (clip.frames.empty())
+	{
+		std::cerr << "Animator::Play - Clip '" << clipId << "' has no frames or was not loaded." << std::endl;
+		return;
+	}
+
+	Play(&clip, clearQueue);
 }
+
+
 
 void Animator::Play(AnimationClip* clip, bool clearQueue)
 {
@@ -119,7 +126,13 @@ void Animator::PlayQueue(const std::string& clipId)
 void Animator::Stop()
 {
 	isPlaying = false;
+	currentFrame = 0;  // Ã¹ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+	if (currentClip != nullptr && !currentClip->frames.empty())
+	{
+		SetFrame(currentClip->frames[currentFrame]);
+	}
 }
+
 
 void Animator::SetFrame(const AnimationFrame& frame)
 {

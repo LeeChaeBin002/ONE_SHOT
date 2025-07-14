@@ -5,12 +5,12 @@ void Framework::Init(int w, int h, const std::string& t)
 {
 	window.create(sf::VideoMode(w, h), t);
     texIds = {
-        "graphics/niko.png",
-        "graphics/player.png"
+        "graphics/Characters/niko.png",
+        
     };
 
     fontIds = {
-        "fonts/arial.ttf"
+        "resources/fonts/TerminusTTF-Bold.ttf"
     };
     soundIds = {
         "sounds/jump.wav"
@@ -42,9 +42,9 @@ void Framework::Do()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            InputMgr::UpdateEvent(event);
             if (event.type == sf::Event::Closed)
                 window.close();
-            InputMgr::UpdateEvent(event);
         }
 
         InputMgr::Update(deltaTime);

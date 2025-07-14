@@ -5,7 +5,7 @@ class Player :
 {
 protected:
     sf::Sprite body;
-    std::string TexId = "graphics/niko.png";
+    std::string TexId = "graphics/Characters/niko.png";
 
    
 public:

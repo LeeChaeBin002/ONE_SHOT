@@ -1,63 +1,29 @@
 #include "stdafx.h"
 #include "TileManager.h"
-#include <fstream>
-#include <sstream>
-
-bool TileManager::Load(const std::string& imagePath, const std::string& csvPath)
+#include <iostream>
+bool TileManager::LoadTileset(const std::string& textureFile, const std::string& csvFile)
 {
-    if (!texture.loadFromFile(imagePath))
+    if (!texture.loadFromFile(textureFile))
+    {
+        std::cerr << "Failed to load texture file: " << textureFile << std::endl;
         return false;
-
-    std::ifstream file(csvPath);
-    std::string line;
-    bool skipHeader = true;
-
-    while (std::getline(file, line)) {
-        if (skipHeader) {
-            skipHeader = false;
-            continue;
-        }
-
-        std::stringstream ss(line);
-        std::string id, tex, sx, sy, sw, sh, category;
-
-        std::getline(ss, id, ',');
-        std::getline(ss, tex, ',');
-        std::getline(ss, sx, ',');
-        std::getline(ss, sy, ',');
-        std::getline(ss, sw, ',');
-        std::getline(ss, sh, ',');
-        std::getline(ss, category, ',');
-
-        int x = std::stoi(sx);
-        int y = std::stoi(sy);
-        int w = std::stoi(sw);
-        int h = std::stoi(sh);
-
-        tileRects[id] = sf::IntRect(x, y, w, h);
-
-        // Ãæµ¹ Ã³¸®: Wall ¶Ç´Â Æ¯Á¤ Ä«Å×°í¸®´Â Ãæµ¹ Å¸ÀÏ·Î °£ÁÖ
-        if (category.find("Wall") != std::string::npos || category == "Furniture") {
-            collidableTiles.insert(id);
-        }
-
-        return true;
     }
+    tiles.clear();
+    // ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+    Tile darkWall;
+    darkWall.sprite.setTexture(texture);
+    darkWall.sprite.setTextureRect(sf::IntRect(0, 0, 48, 48));
+    darkWall.sprite.setPosition(100, 100);
+    tiles.push_back(darkWall);
+
+
+    return true;
 }
 
-    sf::Sprite TileManager::GetSprite(const std::string & name) 
+void TileManager::Draw(sf::RenderWindow& window)
+{
+    for (auto& tile : tiles)
     {
-        sf::Sprite sprite;
-        sprite.setTexture(texture);
-
-        if (tileRects.find(name) != tileRects.end()) {
-            sprite.setTextureRect(tileRects[name]);
-        }
-
-        return sprite;
+        window.draw(tile.sprite);
     }
-    
-
-    bool TileManager::IsCollidable(const std::string& name) const {
-        return collidableTiles.find(name) != collidableTiles.end();
-    }
+}

@@ -2,6 +2,8 @@
 #include "Room.h"
 #include "Player.h"
 #include "AniPlayer.h"
+#include "SpriteGo.h"
+
 
 Room::Room() :Scene(SceneIds::Room)
 {
@@ -10,59 +12,109 @@ Room::Room() :Scene(SceneIds::Room)
 
 void Room::Init()
 {
-	texIds.push_back("graphics/niko.png");
-	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
 	
-	ANI_CLIP_MGR.Load("animations/idleNico.csv");
+	texIds.push_back("graphics/Tilesets/niko_room.png");
+	texIds.push_back("graphics/Icons/item_start_remote.png");
+	texIds.push_back("graphics/Characters/niko.png");
+	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+	// �̶� �� ���� �ε�
+	if (!ANI_CLIP_MGR.Exists("idleNico")) // ���� Ȯ�� �� �ε�
+	{
+		ANI_CLIP_MGR.Load("animations/idleNico.csv");
+	}
+	// niko_room.png�� ������� �߰�
+	SpriteGo* roomBg = new SpriteGo("graphics/Tilesets/niko_room.png","NikoRoom");
+	roomBg->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
+	AddGameObject(roomBg);
 
-	//TextGo* go = new TextGo("resources/fonts/DS-DIGIT.ttf");
-	//go->SetString("Room");
-	//go->SetCharacterSize(30);
-	//go->SetFillColor(sf::Color::White);
-	//go->sortingLayer = SortingLayers::UI;
-	//go->sortingOrder = 0;
+	SpriteGo* remote = new SpriteGo("graphics/Icons/item_start_remote.png", "item1");
+	remote->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
+	AddGameObject(remote);
+
+	TextGo* go = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+	go->SetString("Room");
+	go->SetCharacterSize(30);
+	go->SetFillColor(sf::Color::White);
+	go->sortingLayer = SortingLayers::UI;
+	go->sortingOrder = 0;
 
 	//AddGameObject(go);
 
 	AniPlayer* player=(new AniPlayer("player"));
-	player->SetPosition({ 0.f,-200.f });
+	player->SetPosition({ 0.f,100.f });
+	player->Reset();
 	AddGameObject(player);
 	Scene::Init();
 }
 void Room::Enter()
 {
+	
 	auto size = FRAMEWORK.GetWindowSizeF();
 	sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
 	uiView.setSize(size);
 	uiView.setCenter(center);
 	worldView.setSize(size);
-	worldView.setCenter({ 0.f, -200.f });
-	//tileManager
-	if (!tileMgr.Load("maps/red_start.png", "maps/room.csv"))
+	worldView.setCenter(center);
+	Scene::Enter();
+	// ���⼭ ĳ����, �������� ��ġ ���� ����
+
+	for (auto obj : gameObjects)
 	{
-		std::cerr << "Ÿ�� �ε� ����!" << std::endl;
-		return;
+		if (obj->GetName() == "player")
+		{
+			AniPlayer* player = dynamic_cast<AniPlayer*>(obj);
+			if (player)
+			{
+				player->Reset();
+			}
+		}
 	}
 
-	wall = tileMgr.GetSprite("Red Wall Tile");
-	bed = tileMgr.GetSprite("Bed (Pillow + Blanket)");
-
-	wall.setPosition(100.f, 100.f);
-	bed.setPosition(140.f, 100.f);
-
-	//Scene::Enter();
-
-}
-void Room::Update(float dt)
-{
-	Scene::Update(dt);
+	for (auto obj : gameObjects)
+	{
+		obj->Reset();
+	}
 	
 }
+void Room::Update(float dt)
+{// ù ��° Update������ ��ġ ����
+	if (!positionSet)
+	{
+		for (auto obj : gameObjects)
+		{
+			if (obj->GetName() == "player")
+			{
+				obj->SetPosition({ 300.f, 200.f });
+			}
+			else if (obj->GetName() == "item1")
+			{
+				obj->SetPosition({ 400.f, 250.f });
+			}
+		}
+		positionSet = true;
+	}
+	Scene::Update(dt);
+}
+
 void Room::Draw(sf::RenderWindow& window)
 {
+	// �⺻ �� ����
+	auto defaultView = window.getView();
+
+	window.setView(worldView);
+
+	for (auto obj : gameObjects)
+	{
+		obj->Draw(window);
+	}
+
+	// UI �׸���
+	window.setView(uiView);
+
 	Scene::Draw(window);
-	window.draw(wall);
-	window.draw(bed);
+	
+	window.setView(defaultView);
+	
 }
 void Room::screenchange(const std::string& msg)
 {

@@ -1,0 +1,6 @@
+ID,FPS,LoopType
+runLeft,10,1
+graphics/Characters/niko.png,0,64,48,64,0
+graphics/Characters/niko.png,48,64,48,64,0
+graphics/Characters/niko.png,96,64,48,64,0
+graphics/Characters/niko.png,144,64,48,64,0

@@ -88,5 +88,6 @@ public:
 			return emptyString;
 		return currentClip->id;
 	}
+	AnimationClip* GetCurrentClip() const { return currentClip; }
 };
 

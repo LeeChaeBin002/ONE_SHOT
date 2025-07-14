@@ -9,7 +9,7 @@ SceneDev2::SceneDev2() : Scene(SceneIds::Room)
 
 void SceneDev2::Init()
 {
-	texIds.push_back("graphics/niko.png");
+	texIds.push_back("graphics/Characters/niko.png");
 	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
 
 	//ANI_CLIP_MGR.Load("animations/idleNico.csv");
