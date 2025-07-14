@@ -51,16 +51,6 @@ public:
 	void AddEvent(const std::string& id, int frame, std::function<void()> action);
 	void ClearEvent() { events.clear(); }
 
-	//void AddEvent(const AnimationEvent& ev)
-	//{ 
-	//	if (events.find(ev) != events.end())
-	//	{
-	//		// Error
-	//		return;
-	//	}
-	//	events.insert(ev);
-	//}
-
 	void init();
 	void Update(float dt);
 
@@ -78,7 +68,6 @@ public:
 
 	void Stop();
 
-	//void Pause(bool pause);
 
 	void SetFrame(const AnimationFrame& frame);
 

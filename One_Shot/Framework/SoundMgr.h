@@ -12,6 +12,7 @@ protected:
 	SoundMgr& operator=(const SoundMgr& other) = delete;
 
 	sf::Sound bgm;
+	
 
 	std::list<sf::Sound*> playing;
 	std::list<sf::Sound*> waiting;
@@ -41,6 +42,7 @@ public:
 	void PlaySfx(sf::SoundBuffer& buffer, bool loop = false);
 
 	void StopAllSfx();
+	
 };
 
 #define SOUND_MGR (SoundMgr::Instance())

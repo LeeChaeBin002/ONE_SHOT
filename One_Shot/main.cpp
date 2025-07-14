@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
-#include "TileManager.h"
-
 int main()
 {
     //FRAMEWORK.Init(640 , 480, "One shot!"); 원본 크기

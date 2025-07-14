@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "AniPlayer.h"
 #include "SpriteGo.h"
+#include "SoundMgr.h"
 
 
 Room::Room() :Scene(SceneIds::Room)
@@ -49,7 +50,6 @@ void Room::Init()
 }
 void Room::Enter()
 {
-	
 	auto size = FRAMEWORK.GetWindowSizeF();
 	sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
 	uiView.setSize(size);
@@ -59,6 +59,9 @@ void Room::Enter()
 	Scene::Enter();
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
 
+	bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/ToSleep.ogg"));
+	bgm.setLoop(true);
+	bgm.play();
 	for (auto obj : gameObjects)
 	{
 		if (obj->GetName() == "player")
@@ -118,6 +121,11 @@ void Room::Draw(sf::RenderWindow& window)
 	window.setView(defaultView);
 	
 }
+void Room::Release()
+{
+	bgm.stop();
+}
+
 void Room::screenchange(const std::string& msg)
 {
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
@@ -140,7 +148,7 @@ void Room::CheckItempickup()
 			if (playerBounds.intersects(itemBounds))
 			{
 				obj->SetActive(false); // 아이템 비활성화
-				std::cout << "item get!" << std::endl;
+				std::cout << "item1 get!" << std::endl;
 			}
 		}
 	}

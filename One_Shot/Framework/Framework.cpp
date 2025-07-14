@@ -13,14 +13,12 @@ void Framework::Init(int w, int h, const std::string& t)
         "resources/fonts/TerminusTTF-Bold.ttf"
     };
     soundIds = {
-        "sounds/jump.wav"
+        "Audio/BGM/ToSleep.ogg"
     };
 
 	TEXTURE_MGR.Load(texIds);
 	FONT_MGR.Load(fontIds);
 	SOUNDBUFFER_MGR.Load(soundIds);
-
-    ANI_CLIP_MGR.Load("animations/idleNico.csv");
 
     Utils::Init();
 	InputMgr::Init();

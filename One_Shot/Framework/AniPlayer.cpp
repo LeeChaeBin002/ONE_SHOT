@@ -58,22 +58,6 @@ void AniPlayer::Reset()
 	body.setTexture(TEXTURE_MGR.Get("graphics/Characters/niko.png"));
 	body.setTextureRect(sf::IntRect(0, 0, 48, 64)); // x, y, width, height
 
-	ANI_CLIP_MGR.Load("animations/idleNico.csv");
-	ANI_CLIP_MGR.Load("animations/runRight.csv");
-	ANI_CLIP_MGR.Load("animations/runLeft.csv");
-	ANI_CLIP_MGR.Load("animations/runDown.csv");
-	ANI_CLIP_MGR.Load("animations/runUp.csv");
-
-	animator.SetTarget(&body); // �ִϸ����Ϳ� ����
-	animator.Play("idle");
-	
-
-
-	position={ 0.f, 0.f };
-	SetScale({ 1.f, 1.f });
-	SetRotation(0.f);
-	velocity = { 0.f, 0.f };
-
 
 }
 

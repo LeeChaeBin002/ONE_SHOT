@@ -158,7 +158,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scenes\Room.cpp" />
     <ClCompile Include="Scenes\Mode.cpp" />
-    <ClCompile Include="Scenes\SceneDev2.cpp" />
     <ClCompile Include="Framework\SceneMgr.cpp" />
     <ClCompile Include="Framework\SoundMgr.cpp" />
     <ClCompile Include="Scenes\Setting.cpp" />
@@ -170,7 +169,6 @@
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="Framework\Variables.cpp" />
     <ClCompile Include="Scenes\Title.cpp" />
-    <ClCompile Include="TileManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\AniPlayer.h" />
@@ -189,7 +187,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scenes\Room.h" />
     <ClInclude Include="Scenes\Mode.h" />
-    <ClInclude Include="Scenes\SceneDev2.h" />
     <ClInclude Include="Framework\SceneMgr.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
     <ClInclude Include="Scenes\Setting.h" />
@@ -200,7 +197,6 @@
     <ClInclude Include="Framework\Variables.h" />
     <ClInclude Include="Scenes\Title.h" />
     <ClInclude Include="Scenes\TitleScene.h" />
-    <ClInclude Include="TileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
