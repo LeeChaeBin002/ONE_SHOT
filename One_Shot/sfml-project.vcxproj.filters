@@ -78,10 +78,16 @@
     <ClCompile Include="Framework\AniPlayer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Computer.cpp">
+    <ClCompile Include="Scenes\Computer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LivingRoom.cpp">
+    <ClCompile Include="Scenes\LivingRoom.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\MusicMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\cellar.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,10 +164,16 @@
     <ClInclude Include="Framework\AniPlayer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Computer.h">
+    <ClInclude Include="Scenes\Computer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LivingRoom.h">
+    <ClInclude Include="Scenes\LivingRoom.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\MusicMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\cellar.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,7 +24,7 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 	void Release() override;
 	void ShowMessage(const std::string& msg);
-
+	void Exit()override;
 
 };
 

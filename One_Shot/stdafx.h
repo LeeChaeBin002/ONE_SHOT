@@ -27,6 +27,7 @@
 #include "SoundMgr.h"
 #include "Framework.h"
 #include "AniPlayer.h"
+#include "MusicMgr.h"
 // SCENES
 
 #include "Mode.h"

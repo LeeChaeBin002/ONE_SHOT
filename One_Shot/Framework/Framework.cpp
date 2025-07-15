@@ -65,7 +65,11 @@ void Framework::Do()
             if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                std::cout << "Mouse Position: (" << mousePos.x << ", " << mousePos.y << ")" << std::endl;
+
+                // 월드 좌표 변환
+                sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePos, SCENE_MGR.GetCurrentWorldView());
+
+                std::cout << "Mouse World Position: (" << static_cast<int>(mouseWorldPos.x) << ", " << static_cast<int>(mouseWorldPos.y) << ")" << std::endl;
             }
         }
 

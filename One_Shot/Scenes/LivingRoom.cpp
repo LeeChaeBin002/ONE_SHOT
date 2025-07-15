@@ -44,6 +44,7 @@ void LivingRoom::Init()
 
     player = new AniPlayer("player");
     player->SetPosition({ 0.f, 0.f });
+    player->SetSpeed(150.f);
     player->Reset();
     AddGameObject(player); 
     
@@ -54,6 +55,7 @@ void LivingRoom::Init()
 void LivingRoom::Enter()
 {
     Scene::Enter();
+    
 
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
@@ -64,10 +66,8 @@ void LivingRoom::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-    SOUNDBUFFER_MGR.Load("Audio/BGM/SomeplaceIKnow.ogg");
-    bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/SomeplaceIKnow.ogg"));
-    bgm.setLoop(true);
-    bgm.play();
+    MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+    
     for (auto obj : gameObjects)
     {
         if (obj->GetName() == "player")
@@ -91,10 +91,44 @@ void LivingRoom::Update(float dt)
     if (!player) return;
 
     Scene::Update(dt);
-    // 플레이어 위치 가져오기
+    
+  
+
+    // 마우스 위치를 world 좌표로 변환
+    sf::Vector2i mousePixelPos = sf::Mouse::getPosition(FRAMEWORK.GetWindow());
+    sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePixelPos, worldView);
+
+    // 월드 좌표를 문자열로 표시
+    std::ostringstream oss;
+    oss << "Mouse World Pos: (" << mouseWorldPos.x << ", " << mouseWorldPos.y << ")";
+    messageText->SetString(oss.str());
+
+    // 예시: 플레이어 따라 worldView 이동
     sf::Vector2f playerPos = player->GetPosition();
-    // View의 중심을 플레이어 위치로 설정
     worldView.setCenter(playerPos);
+
+
+    //니코방으로 돌아가기
+    if (playerPos.x >= 300  && playerPos.x <= 340 &&
+        playerPos.y >= 180 && playerPos.y <= 200)
+    {
+        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+        {
+
+            SCENE_MGR.ChangeScene(SceneIds::Room);
+        }
+    }
+    //지하실 내려가기
+    if (playerPos.x >= 700 && playerPos.x <= 750 &&
+        playerPos.y >= 200 && playerPos.y <= 300)
+    {
+        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+        {
+
+            SCENE_MGR.ChangeScene(SceneIds::cellar);
+        }
+    }
+
     if (!positionSet)
     {
         for (auto obj : gameObjects)
@@ -128,7 +162,7 @@ void LivingRoom::Draw(sf::RenderWindow& window)
 
 void LivingRoom::Release()
 {
-   bgm.stop();
+  
 }
 
 void LivingRoom::ShowMessage(const std::string& msg)
@@ -137,4 +171,9 @@ void LivingRoom::ShowMessage(const std::string& msg)
     {
         messageText->SetString(msg);
     }
+}
+void LivingRoom::Exit()
+{
+    bgm.stop();  // 음악 정지
+    Scene::Exit(); // 부모 클래스 Exit 호출 (리소스 언로드 등)
 }

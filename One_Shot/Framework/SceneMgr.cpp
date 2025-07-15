@@ -4,7 +4,13 @@
 #include "Computer.h"
 #include "Scene.h"
 #include "LivingRoom.h"
+#include "cellar.h"
 
+
+const sf::View& SceneMgr::GetCurrentWorldView() const
+{
+	return scenes[(int)currentScene]->GetWorldView();
+}
 
 void SceneMgr::Init()
 {
@@ -13,6 +19,7 @@ void SceneMgr::Init()
 	scenes.push_back(new Room());
 	scenes.push_back(new Computer());
 	scenes.push_back(new LivingRoom());
+	scenes.push_back(new cellar());
 	scenes.push_back(new Setting());
 	scenes.push_back(new Stage1());
 	

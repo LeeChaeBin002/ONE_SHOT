@@ -5,6 +5,7 @@ class SceneMgr : public Singleton<SceneMgr>
 {
 	friend class Singleton<SceneMgr>;
 
+
 protected:
 	SceneMgr() = default;
 	~SceneMgr() = default;
@@ -16,6 +17,7 @@ protected:
 	SceneIds nextScene = SceneIds::None;
 
 public:
+	const sf::View& GetCurrentWorldView() const;
 	void Init();
 	void Release();
 	

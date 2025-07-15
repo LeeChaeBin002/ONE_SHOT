@@ -214,3 +214,28 @@ sf::Vector2i Scene::UiToScreen(sf::Vector2f uiPos)
 {
 	return FRAMEWORK.GetWindow().mapCoordsToPixel(uiPos, uiView);
 }
+
+sf::Vector2f Scene::GetOutsidePosition(const std::string& direction, float offset) const
+{
+	sf::Vector2f center = worldView.getCenter();
+	sf::Vector2f size = worldView.getSize();
+
+	if (direction == "left")
+	{
+		return { center.x - size.x / 2 - offset, center.y };
+	}
+	else if (direction == "right")
+	{
+		return { center.x + size.x / 2 + offset, center.y };
+	}
+	else if (direction == "top")
+	{
+		return { center.x, center.y - size.y / 2 - offset };
+	}
+	else if (direction == "bottom")
+	{
+		return { center.x, center.y + size.y / 2 + offset };
+	}
+
+	return center; 
+}

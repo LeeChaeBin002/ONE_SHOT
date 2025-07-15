@@ -50,7 +50,8 @@ void Room::Init()
 	AddGameObject(messageText);
 
 	player = new AniPlayer("player");
-	player->SetPosition({ 0.f,100.f });
+	player->SetPosition({ 0.f,0.f });
+	player->SetSpeed(300.f);
 	player->Reset();
 	AddGameObject(player);
 	Scene::Init();
@@ -68,9 +69,8 @@ void Room::Enter()
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
 
 	messageText->SetString("");
-	SOUNDBUFFER_MGR.Load("Audio/BGM/SomeplaceIKnow.ogg");
-	bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/SomeplaceIKnow.ogg"));
-	bgm.setLoop(true);
+	MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+	
 	bgm.play();
 	for (auto obj : gameObjects)
 	{
@@ -176,7 +176,7 @@ void Room::Draw(sf::RenderWindow& window)
 }
 void Room::Release()
 {
-	bgm.stop();
+	
 }
 
 void Room::screenchange(const std::string& msg)
@@ -212,4 +212,8 @@ void Room::ShowMessage(const std::string& msg)
 	{
 		messageText->SetString(msg);
 	}
+}
+void Room::Exit()
+{
+	
 }

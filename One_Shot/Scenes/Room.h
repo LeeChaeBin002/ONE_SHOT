@@ -37,5 +37,7 @@ public:
     void Draw(sf::RenderWindow& window)override;
     void Release() override;
     void screenchange(const std::string& msg);
+    void Exit()override;
+
 };
 

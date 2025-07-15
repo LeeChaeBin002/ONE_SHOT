@@ -23,8 +23,8 @@ public:
 	Scene(SceneIds id);
 	//const SceneIds Id;
 	virtual ~Scene() = default;
-
 	SceneIds GetId() const { return id; }
+	const sf::View& GetWorldView() const { return worldView; }
 	virtual void Init();
 	virtual void Release();
 
@@ -46,6 +46,9 @@ public:
 	sf::Vector2i WorldToScreen(sf::Vector2f worldPos);
 	sf::Vector2f ScreenToUi(sf::Vector2i screePos);
 	sf::Vector2i UiToScreen(sf::Vector2f worldPos);
+
+	sf::Vector2f GetOutsidePosition(const std::string& direction, float offset = 100.f) const;
+
 };
 
 struct DrawOrderComparer

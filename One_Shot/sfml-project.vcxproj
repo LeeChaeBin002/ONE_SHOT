@@ -145,7 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Computer.cpp" />
+    <ClCompile Include="Scenes\cellar.cpp" />
+    <ClCompile Include="Scenes\Computer.cpp" />
     <ClCompile Include="Framework\AniPlayer.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
@@ -155,8 +156,9 @@
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\SpriteGo.cpp" />
     <ClCompile Include="Framework\Scene.cpp" />
-    <ClCompile Include="LivingRoom.cpp" />
+    <ClCompile Include="Scenes\LivingRoom.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Framework\MusicMgr.cpp" />
     <ClCompile Include="Scenes\Room.cpp" />
     <ClCompile Include="Scenes\Mode.cpp" />
     <ClCompile Include="Framework\SceneMgr.cpp" />
@@ -172,7 +174,8 @@
     <ClCompile Include="Scenes\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Computer.h" />
+    <ClInclude Include="Scenes\cellar.h" />
+    <ClInclude Include="Scenes\Computer.h" />
     <ClInclude Include="Framework\AniPlayer.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
@@ -186,7 +189,8 @@
     <ClInclude Include="Framework\Singleton.h" />
     <ClInclude Include="Framework\SpriteGo.h" />
     <ClInclude Include="Framework\Scene.h" />
-    <ClInclude Include="LivingRoom.h" />
+    <ClInclude Include="Scenes\LivingRoom.h" />
+    <ClInclude Include="Framework\MusicMgr.h" />
     <ClInclude Include="Scenes\Room.h" />
     <ClInclude Include="Scenes\Mode.h" />
     <ClInclude Include="Framework\SceneMgr.h" />

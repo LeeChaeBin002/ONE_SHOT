@@ -28,6 +28,7 @@ public:
 	void SetPosition(const sf::Vector2f& pos) override;
 	void SetRotation(float angle) override;
 	void SetScale(const sf::Vector2f& scale) override;
+	void SetSpeed(float s) { speed = s; }
 
 	void SetOrigin(Origins preset) override;
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
