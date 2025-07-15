@@ -3,7 +3,14 @@
 class cellar : public Scene
 {
 protected:
+    
+    AniPlayer* player = nullptr;
+    sf::Sound bgm;
 
+    sf::Sprite background;
+    bool positionSet = false;
+    TextGo* messageText = nullptr;
+    bool canAccessLivingRoom = false;
 public:
 	cellar();
 	~cellar()override=default;

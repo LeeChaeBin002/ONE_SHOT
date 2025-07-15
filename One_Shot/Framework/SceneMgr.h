@@ -5,7 +5,6 @@ class SceneMgr : public Singleton<SceneMgr>
 {
 	friend class Singleton<SceneMgr>;
 
-
 protected:
 	SceneMgr() = default;
 	~SceneMgr() = default;
@@ -15,6 +14,7 @@ protected:
 	SceneIds startScene = SceneIds::LivingRoom;
 	SceneIds currentScene = SceneIds::None;
 	SceneIds nextScene = SceneIds::None;
+	SceneIds previousScene = SceneIds::None;
 
 public:
 	const sf::View& GetCurrentWorldView() const;
@@ -22,6 +22,7 @@ public:
 	void Release();
 	
 	void ChangeScene(SceneIds id);
+	SceneIds GetPreviousScene() const { return previousScene; }
 
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);

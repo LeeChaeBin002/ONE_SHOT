@@ -58,6 +58,7 @@ void SceneMgr::Release()
 
 void SceneMgr::ChangeScene(SceneIds id)
 {
+	previousScene = currentScene;
 	nextScene = id;
 }
 

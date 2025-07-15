@@ -67,29 +67,7 @@ void LivingRoom::Enter()
     messageText->SetString("");
     MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
     
-    /*for (auto obj : gameObjects)
-    {
-        if (obj->GetName() == "player")
-        {
-            AniPlayer* player = dynamic_cast<AniPlayer*>(obj);
-            if (player)
-            {
-                player->Reset();
-            }
-        }
-    }*/
-    /*if (player && !positionSet)
-    {
-        player->SetPosition({ 308.f, 180.f });
-        player->Reset();
-    }
-    for (auto obj : gameObjects)
-    {
-        obj->Reset();
-    }*/
-    
-        positionSet = false;
-    
+    positionSet = false;
 }
 
 void LivingRoom::Update(float dt)
@@ -140,15 +118,20 @@ void LivingRoom::Update(float dt)
 
     if (!positionSet)
     {
-        for (auto obj : gameObjects)
+        if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
         {
-            if (obj->GetName() == "player")
-            {
-                obj->SetPosition({ 308.f, 180.f });
-            }
-           
+            // 지하실에서 올라온 경우
+            player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 260.f });
+        }
+        else
+        {
+            // 니코 방에서 온 경우
+            player->SetPosition({ 308.f, 180.f });
         }
         positionSet = true;
+
+ 
+       
     }
 
     if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
