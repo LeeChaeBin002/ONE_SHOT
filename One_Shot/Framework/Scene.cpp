@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 Scene::Scene(SceneIds id)
-	: Id(id)
+	: id(id)
 {
 }
 

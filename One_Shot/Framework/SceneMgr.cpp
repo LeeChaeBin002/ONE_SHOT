@@ -2,6 +2,7 @@
 #include "SceneMgr.h"
 #include "Room.h"
 #include "Computer.h"
+#include "Scene.h"
 
 
 void SceneMgr::Init()
@@ -36,7 +37,7 @@ void SceneMgr::Release()
 {
 	for (auto scene : scenes)
 	{
-		if (scene->Id == currentScene)
+		if (scene->GetId() == currentScene)
 		{
 			scene->Exit();
 		}
@@ -67,4 +68,16 @@ void SceneMgr::Update(float dt)
 void SceneMgr::Draw(sf::RenderWindow& window)
 {
 	scenes[(int)currentScene]->Draw(window);
+}
+
+Scene* SceneMgr::GetScene(SceneIds id)
+{
+	for (auto scene : scenes)
+	{
+		if (scene->GetId() == id)
+		{
+			return scene;
+		}
+	}
+	return nullptr;
 }

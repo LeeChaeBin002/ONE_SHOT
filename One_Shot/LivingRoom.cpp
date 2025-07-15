@@ -50,8 +50,6 @@ void LivingRoom::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-
-    
     
 }
 

@@ -103,7 +103,7 @@ void Room::Update(float dt)
 	{
 		if (InputMgr::GetKeyDown(sf::Keyboard::Z))
 		{
-			std::cout << "Z key pressed!" << std::endl;
+		
 			SCENE_MGR.ChangeScene(SceneIds::Computer);
 		}
 	}
@@ -134,6 +134,18 @@ void Room::Update(float dt)
 			ShowMessage("hint:2817");
 		}
 	}
+
+	if (canAccessLivingRoom && InputMgr::GetKeyDown(sf::Keyboard::Z))
+	{
+		if (playerPos.x >= 306 && playerPos.x <= 338 &&
+			playerPos.y >= 280 && playerPos.y <= 333)
+		{
+			std::cout << "LivingRoom 이동!" << std::endl;
+			SCENE_MGR.ChangeScene(SceneIds::LivingRoom);
+		}
+		
+	}
+
 	Scene::Update(dt);
 }
 
@@ -169,10 +181,7 @@ void Room::Release()
 
 void Room::screenchange(const std::string& msg)
 {
-	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
-	{
-		SCENE_MGR.ChangeScene(SceneIds::Title);
-	}
+	
 }
 
 void Room::CheckItempickup()

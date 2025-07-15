@@ -13,7 +13,7 @@ protected:
 	sf::Sprite background;
 	bool positionSet = false;
 	TextGo* messageText = nullptr;
-
+	bool canAccessLivingRoom = false;
 
 public:
 	LivingRoom();

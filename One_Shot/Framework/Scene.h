@@ -3,6 +3,8 @@
 class Scene
 {
 protected:
+	SceneIds id = SceneIds::None;
+
 	std::list<GameObject*> gameObjects;
 
 	std::list<GameObject*> objectsToAdd;
@@ -18,11 +20,11 @@ protected:
 	void ApplyPendingChanges();
 
 public:
-	const SceneIds Id;
-
 	Scene(SceneIds id);
+	//const SceneIds Id;
 	virtual ~Scene() = default;
 
+	SceneIds GetId() const { return id; }
 	virtual void Init();
 	virtual void Release();
 

@@ -3,6 +3,8 @@
 #include "TextGo.h"
 #include "SpriteGo.h"
 #include "Framework.h"
+#include "Room.h"
+#include "SceneMgr.h"
 
 Computer::Computer() :Scene(SceneIds::Computer)
 {
@@ -115,6 +117,13 @@ void Computer::Update(float dt)
                         bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/SE/door_open.wav"));
                         bgm.setLoop(false);
                         bgm.play();
+
+                        Scene* scene = SCENE_MGR.GetScene(SceneIds::Room);
+                        Room* room = dynamic_cast<Room*>(scene);
+                        if (room)
+                        {
+                            room->SetAccessLivingRoom(true);
+                        }
                     }
                     else
                     {

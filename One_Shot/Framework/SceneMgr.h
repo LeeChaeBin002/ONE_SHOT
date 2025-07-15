@@ -1,4 +1,6 @@
 #pragma once
+#include "Scene.h"
+
 class SceneMgr : public Singleton<SceneMgr>
 {
 	friend class Singleton<SceneMgr>;
@@ -21,6 +23,7 @@ public:
 
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
+	Scene* GetScene(SceneIds id);
 };
 
 #define SCENE_MGR (SceneMgr::Instance())

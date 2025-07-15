@@ -20,11 +20,15 @@ protected:
     TextGo* screen;
     TextGo* clickStart;
     SceneIds changeScene = SceneIds::Setting;
+    bool canAccessLivingRoom = false;
+    
 
 public:
     Room();
     ~Room() override = default;
 
+    void SetAccessLivingRoom(bool access) { canAccessLivingRoom = access; }
+    bool CanAccessLivingRoom() const { return canAccessLivingRoom; }
     void CheckItempickup();
     void ShowMessage(const std::string& msg);
     void Init() override;
