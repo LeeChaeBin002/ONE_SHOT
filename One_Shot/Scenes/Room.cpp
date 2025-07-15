@@ -17,7 +17,8 @@ void Room::Init()
 	texIds.push_back("graphics/Tilesets/niko_room.png");
 	texIds.push_back("graphics/Icons/item_start_remote.png");
 	texIds.push_back("graphics/Characters/niko.png");
-	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+	fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
+	
 	// �̶� �� ���� �ε�
 	if (!ANI_CLIP_MGR.Exists("idleNico")) // ���� Ȯ�� �� �ε�
 	{
@@ -32,7 +33,7 @@ void Room::Init()
 	remote->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
 	AddGameObject(remote);
 
-	TextGo* go = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+	TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
 	go->SetString("Room");
 	go->SetCharacterSize(30);
 	go->SetFillColor(sf::Color::White);
@@ -40,7 +41,7 @@ void Room::Init()
 	go->sortingOrder = 0;
 	AddGameObject(go);
 
-	messageText = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+	messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
 	messageText->SetCharacterSize(24);
 	messageText->SetFillColor(sf::Color::White);
 	messageText->SetPosition({ 50.f, 50.f }); // 적당한 화면 좌표
@@ -67,7 +68,8 @@ void Room::Enter()
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
 
 	messageText->SetString("");
-	bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/ToSleep.ogg"));
+	SOUNDBUFFER_MGR.Load("Audio/BGM/SomeplaceIKnow.ogg");
+	bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/SomeplaceIKnow.ogg"));
 	bgm.setLoop(true);
 	bgm.play();
 	for (auto obj : gameObjects)

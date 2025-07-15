@@ -169,6 +169,5 @@
     <CopyFileToFolders Include="stdafx.h">
       <Filter>헤더 파일</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\sfml-project-bin\resources\fonts\TerminusTTF-Bold.ttf" />
   </ItemGroup>
 </Project>

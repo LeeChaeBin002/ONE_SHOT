@@ -17,10 +17,10 @@ void Framework::Init(int w, int h, const std::string& t)
     };
 
     fontIds = {
-        "resources/fonts/TerminusTTF-Bold.ttf"
+        "fonts/TerminusTTF-Bold.ttf"
     };
     soundIds = {
-        "Audio/BGM/ToSleep.ogg"
+        
     };
 
 	TEXTURE_MGR.Load(texIds);
@@ -32,7 +32,7 @@ void Framework::Init(int w, int h, const std::string& t)
         if (!FONT_MGR.Exists(id))
         {
            
-           FONT_MGR.Load("resources/fonts/TerminusTTF-Bold.ttf");    
+           FONT_MGR.Load("fonts/TerminusTTF-Bold.ttf");    
         }
     }
 

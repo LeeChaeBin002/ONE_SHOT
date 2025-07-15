@@ -14,7 +14,7 @@ void Title::screenchange(const std::string& msg)
 void Title::Init() 
 {
 	texIds.push_back("resources/background.png");
-	fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+	fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
 }
 void Title::Enter()
 {
@@ -36,13 +36,13 @@ void Title::Enter()
 	sf::Vector2u texSize = bgTex->getSize();
 	bg->SetScale({ winSize.x / texSize.x,winSize.y / texSize.y });
 
-	clickStart = (TextGo*)AddGameObject(new TextGo("resources/fonts/TerminusTTF-Bold.ttf"));
+	clickStart = (TextGo*)AddGameObject(new TextGo("fonts/TerminusTTF-Bold.ttf"));
 	clickStart->SetString("Click to start");
 	clickStart->SetCharacterSize(50);
 	clickStart->SetFillColor(sf::Color::White);
 	clickStart->SetPosition({ 800.0f, 850.f });
 
-	const sf::Font& font = FONT_MGR.Get("resources/fonts/TerminusTTF-Bold.ttf");
+	const sf::Font& font = FONT_MGR.Get("fonts/TerminusTTF-Bold.ttf");
 	if (FONT_MGR.IsEmpty(font))
 	{
 		std::cerr << "폰트 로딩 실패: --" << std::endl;
@@ -52,7 +52,7 @@ void Title::Enter()
 		screen->GetText().setFont(font);
 		clickStart->GetText().setFont(font);
 		
-	}
+	} 
 }
 void Title::Update(float dt)
 {

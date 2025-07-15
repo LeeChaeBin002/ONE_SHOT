@@ -7,14 +7,20 @@ LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
 void LivingRoom::Init()
 {
     texIds.push_back("graphics/Tilesets/living_room.png");  // 예시 배경
-    fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+    fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
 
     SpriteGo* roomBg = new SpriteGo("graphics/Tilesets/living_room.png", "LivingRoomBg");
     roomBg->SetOrigin(Origins::TL);
     roomBg->SetPosition({ 0.f, 0.f });
     AddGameObject(roomBg);
 
-    messageText = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+    //룸 이어서 노래 재생
+    SOUNDBUFFER_MGR.Load("Audio/BGM/SomeplaceIKnow.ogg");
+    bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/SomeplaceIKnow.ogg"));
+    bgm.setLoop(true);
+    bgm.play();
+
+    messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
     messageText->Init();
     messageText->SetCharacterSize(24);
     messageText->SetFillColor(sf::Color::White);

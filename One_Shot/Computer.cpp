@@ -10,7 +10,7 @@ Computer::Computer() :Scene(SceneIds::Computer)
 }
 void Computer::Init()
 {
-    passwordText = new TextGo("resources/fonts/TerminusTTF-Bold.ttf");
+    passwordText = new TextGo("fonts/TerminusTTF-Bold.ttf");
     passwordText->Init();
     passwordText->SetString("PassWord: ");
     passwordText->SetCharacterSize(30);
@@ -21,7 +21,7 @@ void Computer::Init()
     AddGameObject(passwordText);
 
     texIds.push_back("graphics/Pictures/cg_desktop_no_effects.png");
-    fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
+    fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
     // 컴퓨터 화면 이미지 추가
     SpriteGo* computerScreen = new SpriteGo("graphics/Pictures/cg_desktop_no_effects.png", "ComputerScreen");
    
@@ -51,8 +51,8 @@ void Computer::Init()
 void Computer::Enter()
 {
     Scene::Enter();
-    SOUNDBUFFER_MGR.Load("resources/Audio/SE/pc_messagebox.wav");
-    bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/pc_messagebox.wav"));
+    SOUNDBUFFER_MGR.Load("Audio/SE/pc_messagebox.wav");
+    bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/SE/pc_messagebox.wav"));
     bgm.setLoop(false);
     bgm.play();
 
@@ -111,8 +111,8 @@ void Computer::Update(float dt)
                     {
                         std::cout << "비밀번호 정답!" << std::endl;
                         ShowMessage("Password Success!");
-                        SOUNDBUFFER_MGR.Load("resources/Audio/SE/door_open.wav");
-                        bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/door_open.wav"));
+                        SOUNDBUFFER_MGR.Load("Audio/SE/door_open.wav");
+                        bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/SE/door_open.wav"));
                         bgm.setLoop(false);
                         bgm.play();
                     }
