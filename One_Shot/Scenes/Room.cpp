@@ -140,7 +140,7 @@ void Room::Update(float dt)
 		if (playerPos.x >= 306 && playerPos.x <= 338 &&
 			playerPos.y >= 280 && playerPos.y <= 333)
 		{
-			std::cout << "LivingRoom 이동!" << std::endl;
+			std::cout << "LivingRoom movement!" << std::endl;
 			SCENE_MGR.ChangeScene(SceneIds::LivingRoom);
 		}
 		

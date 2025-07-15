@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "livingRoom.h"
 
 LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
@@ -6,19 +6,32 @@ LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
 }
 void LivingRoom::Init()
 {
-    texIds.push_back("graphics/Tilesets/living_room.png");  // ¿¹½Ã ¹è°æ
+    soundIds.push_back("Audio/BGM/SomeplaceIKnow.ogg");
+    texIds.push_back("graphics/Tilesets/living_room.png");
+    texIds.push_back("graphics/Characters/niko.png");
     fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
 
-    SpriteGo* roomBg = new SpriteGo("graphics/Tilesets/living_room.png", "LivingRoomBg");
-    roomBg->SetOrigin(Origins::TL);
-    roomBg->SetPosition({ 0.f, 0.f });
-    AddGameObject(roomBg);
+    if (!ANI_CLIP_MGR.Exists("idleNico")) // ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½
+    {
+        ANI_CLIP_MGR.Load("animations/idleNico.csv");
+    }
 
-    //·ë ÀÌ¾î¼­ ³ë·¡ Àç»ý
-    SOUNDBUFFER_MGR.Load("Audio/BGM/SomeplaceIKnow.ogg");
-    bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/SomeplaceIKnow.ogg"));
-    bgm.setLoop(true);
-    bgm.play();
+    if (!TEXTURE_MGR.Load("graphics/Tilesets/living_room.png"))
+    {
+        std::cerr << "LivingRoom ë°°ê²½ í…ìŠ¤ì²˜ ë¡œë“œ ì‹¤íŒ¨" << std::endl;
+    }
+
+    SpriteGo* LivingBg = new SpriteGo("graphics/Tilesets/living_room.png", "LivingRoomBg");
+    LivingBg->SetPosition({ 0.f, 0.f });
+    AddGameObject(LivingBg);
+    
+    TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
+    go->SetString("Living Room");
+    go->SetCharacterSize(30);
+    go->SetFillColor(sf::Color::White);
+    go->sortingLayer = SortingLayers::UI;
+    go->sortingOrder = 0;
+    AddGameObject(go);
 
     messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
     messageText->Init();
@@ -30,10 +43,11 @@ void LivingRoom::Init()
     AddGameObject(messageText);
 
     player = new AniPlayer("player");
-    player->SetPosition({ 100.f, 300.f });
+    player->SetPosition({ 0.f, 0.f });
     player->Reset();
-    AddGameObject(player);
-
+    AddGameObject(player); 
+    
+    
     Scene::Init();
 }
 
@@ -50,33 +64,71 @@ void LivingRoom::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-    
+    SOUNDBUFFER_MGR.Load("Audio/BGM/SomeplaceIKnow.ogg");
+    bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/BGM/SomeplaceIKnow.ogg"));
+    bgm.setLoop(true);
+    bgm.play();
+    for (auto obj : gameObjects)
+    {
+        if (obj->GetName() == "player")
+        {
+            AniPlayer* player = dynamic_cast<AniPlayer*>(obj);
+            if (player)
+            {
+                player->Reset();
+            }
+        }
+    }
+    for (auto obj : gameObjects)
+    {
+        obj->Reset();
+    }
 }
 
 void LivingRoom::Update(float dt)
 {
-    Scene::Update(dt);
+    
+    if (!player) return;
 
+    Scene::Update(dt);
+    // í”Œë ˆì´ì–´ ìœ„ì¹˜ ê°€ì ¸ì˜¤ê¸°
+    sf::Vector2f playerPos = player->GetPosition();
+    // Viewì˜ ì¤‘ì‹¬ì„ í”Œë ˆì´ì–´ ìœ„ì¹˜ë¡œ ì„¤ì •
+    worldView.setCenter(playerPos);
     if (!positionSet)
     {
-        player->SetPosition({ 200.f, 300.f });
+        for (auto obj : gameObjects)
+        {
+            if (obj->GetName() == "player")
+            {
+                obj->SetPosition({ 308.f, 180.f });
+            }
+           
+        }
         positionSet = true;
     }
 
     if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
     {
-        SCENE_MGR.ChangeScene(SceneIds::Room);  // ¿¹½Ã: ¹æÀ¸·Î µ¹¾Æ°¡±â
+        SCENE_MGR.ChangeScene(SceneIds::Room);  // ì˜ˆì‹œ: ë°©ìœ¼ë¡œ ëŒì•„ê°€ê¸°
     }
+    Scene::Update(dt);
 }
 
 void LivingRoom::Draw(sf::RenderWindow& window)
 {
-    Scene::Draw(window);
+    Scene::Draw(window); // Sceneì´ ì•Œì•„ì„œ worldView, uiView, gameObjects draw
+
+    if (messageText && messageText->GetActive())
+    {
+        messageText->Draw(window);
+    }
 }
+    
 
 void LivingRoom::Release()
 {
-    bgm.stop();
+   bgm.stop();
 }
 
 void LivingRoom::ShowMessage(const std::string& msg)

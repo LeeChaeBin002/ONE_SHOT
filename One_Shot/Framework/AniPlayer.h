@@ -12,7 +12,7 @@ protected:
 	sf::Vector2f gravity = { 0.f, 0.f };
 	sf::Vector2f velocity = { 0.f, 0.f };
 	bool isGrounded = true;
-	float speed = 500.f;
+	float speed = 200.f;
 	float animationTime = 0.f;  // 애니메이션 경과 시간
 	int currentFrame = 0;
 

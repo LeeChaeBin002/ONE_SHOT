@@ -11,7 +11,7 @@ protected:
 
 	std::vector<Scene*> scenes;
 
-	SceneIds startScene = SceneIds::Room;
+	SceneIds startScene = SceneIds::LivingRoom;
 	SceneIds currentScene = SceneIds::None;
 	SceneIds nextScene = SceneIds::None;
 
