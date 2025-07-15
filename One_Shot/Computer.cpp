@@ -24,9 +24,7 @@ void Computer::Init()
     fontIds.push_back("resources/fonts/TerminusTTF-Bold.ttf");
     // 컴퓨터 화면 이미지 추가
     SpriteGo* computerScreen = new SpriteGo("graphics/Pictures/cg_desktop_no_effects.png", "ComputerScreen");
-    bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/pc_messagebox.wav"));
-    bgm.setLoop(false);
-    bgm.play();
+   
     const sf::Texture* texture = computerScreen->GetSprite().getTexture();
     //sf::Vector2f center = FRAMEWORK.GetWindowSizeF() * 0.5f;
 
@@ -53,6 +51,7 @@ void Computer::Init()
 void Computer::Enter()
 {
     Scene::Enter();
+    SOUNDBUFFER_MGR.Load("resources/Audio/SE/pc_messagebox.wav");
     bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/pc_messagebox.wav"));
     bgm.setLoop(false);
     bgm.play();
@@ -112,11 +111,16 @@ void Computer::Update(float dt)
                     {
                         std::cout << "비밀번호 정답!" << std::endl;
                         ShowMessage("Password Success!");
+                        SOUNDBUFFER_MGR.Load("resources/Audio/SE/door_open.wav");
+                        bgm.setBuffer(SOUNDBUFFER_MGR.Get("resources/Audio/SE/door_open.wav"));
+                        bgm.setLoop(false);
+                        bgm.play();
                     }
                     else
                     {
                         std::cout << "비밀번호 틀림!" << std::endl;
                         ShowMessage("Password Failed!");
+                        
                     }
 
                     passwordInput.clear();  // 다시 입력받기

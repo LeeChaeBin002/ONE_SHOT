@@ -45,9 +45,8 @@ void LivingRoom::Enter()
 
     messageText->SetString("");
 
-    bgm.setBuffer(SOUNDBUFFER_MGR.Get("Audio/SE/pc_messagebox.ogg"));
-    bgm.setLoop(true);
-    bgm.play();
+    
+    
 }
 
 void LivingRoom::Update(float dt)
