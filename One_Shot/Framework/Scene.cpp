@@ -4,6 +4,9 @@
 Scene::Scene(SceneIds id)
 	: id(id)
 {
+	auto size = FRAMEWORK.GetWindowSizeF();
+	worldView.setSize(size);
+	worldView.setCenter(size * 0.5f);
 }
 
 void Scene::Init()

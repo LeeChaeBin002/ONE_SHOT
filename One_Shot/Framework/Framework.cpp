@@ -62,12 +62,19 @@ void Framework::Do()
             if (event.type == sf::Event::Closed)
                 window.close();
             // 마우스 이동 이벤트 감지
+
             if (event.type == sf::Event::MouseMoved)
             {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
+                const sf::View& view = SCENE_MGR.GetCurrentWorldView();
+                if (view.getSize().x == 0.f || view.getSize().y == 0.f)
+                {
+                    std::cerr << "Warning: worldView not initialized yet.\n";
+                    continue; // worldView 초기화 안 됐으면 skip
+                }
                 // 월드 좌표 변환
-                sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePos, SCENE_MGR.GetCurrentWorldView());
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePos,view);
+
 
                 std::cout << "Mouse World Position: (" << static_cast<int>(mouseWorldPos.x) << ", " << static_cast<int>(mouseWorldPos.y) << ")" << std::endl;
             }

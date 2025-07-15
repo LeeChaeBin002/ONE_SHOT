@@ -55,7 +55,6 @@ void LivingRoom::Init()
 void LivingRoom::Enter()
 {
     Scene::Enter();
-    
 
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
@@ -68,7 +67,7 @@ void LivingRoom::Enter()
     messageText->SetString("");
     MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
     
-    for (auto obj : gameObjects)
+    /*for (auto obj : gameObjects)
     {
         if (obj->GetName() == "player")
         {
@@ -78,25 +77,35 @@ void LivingRoom::Enter()
                 player->Reset();
             }
         }
+    }*/
+    /*if (player && !positionSet)
+    {
+        player->SetPosition({ 308.f, 180.f });
+        player->Reset();
     }
     for (auto obj : gameObjects)
     {
         obj->Reset();
-    }
+    }*/
+    
+        positionSet = false;
+    
 }
 
 void LivingRoom::Update(float dt)
 {
-    
-    if (!player) return;
 
-    Scene::Update(dt);
-    
-  
-
+    if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
+    {
+       return;
+    }
     // 마우스 위치를 world 좌표로 변환
     sf::Vector2i mousePixelPos = sf::Mouse::getPosition(FRAMEWORK.GetWindow());
     sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePixelPos, worldView);
+
+    
+    if (!player) return;
+
 
     // 월드 좌표를 문자열로 표시
     std::ostringstream oss;
@@ -174,6 +183,7 @@ void LivingRoom::ShowMessage(const std::string& msg)
 }
 void LivingRoom::Exit()
 {
-    bgm.stop();  // 음악 정지
+    bgm.stop(); // 음악 정지
+    positionSet = false;
     Scene::Exit(); // 부모 클래스 Exit 호출 (리소스 언로드 등)
 }

@@ -65,6 +65,7 @@ void Room::Enter()
 	uiView.setCenter(center);
 	worldView.setSize(size);
 	worldView.setCenter(center);
+	positionSet = false;
 	Scene::Enter();
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
 
