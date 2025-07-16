@@ -44,6 +44,7 @@ void LivingRoom::Init()
 
     player = new AniPlayer("player");
     player->SetPosition({ 0.f, 0.f });
+    player->ApplyStateTexture();
     player->SetSpeed(150.f);
     player->Reset();
     AddGameObject(player); 
@@ -66,7 +67,7 @@ void LivingRoom::Enter()
 
     messageText->SetString("");
     MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
-    
+    player->ApplyStateTexture();
     positionSet = false;
 }
 

@@ -53,6 +53,7 @@ void Room::Init()
 	player->SetPosition({ 0.f,0.f });
 	player->SetSpeed(300.f);
 	player->Reset();
+	player->ApplyStateTexture();
 	AddGameObject(player);
 	Scene::Init();
 	
@@ -66,6 +67,7 @@ void Room::Enter()
 	worldView.setSize(size);
 	worldView.setCenter(center);
 	positionSet = false;
+	player->ApplyStateTexture();
 	Scene::Enter();
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
 
@@ -81,6 +83,7 @@ void Room::Enter()
 			if (player)
 			{
 				player->Reset();
+				player->ApplyStateTexture(); 
 			}
 		}
 	}
@@ -89,7 +92,7 @@ void Room::Enter()
 	{
 		obj->Reset();
 	}
-	
+	player->ApplyStateTexture(); 
 }
 void Room::Update(float dt)
 {// ù ��° Update������ ��ġ ����

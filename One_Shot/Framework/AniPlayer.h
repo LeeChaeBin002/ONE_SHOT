@@ -20,6 +20,7 @@ protected:
 	int currentFrame = 0;
 
 public:
+	static bool hasBulb;
 	sf::Sprite& GetSprite() { return sprite; }
 	AniPlayer(const std::string& name = "");
 	~AniPlayer() = default;

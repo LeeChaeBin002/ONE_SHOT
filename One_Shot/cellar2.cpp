@@ -2,6 +2,7 @@
 #include "cellar2.h"
 #include "SpriteGo.h"
 #include "Framework.h"
+#include "AniPlayer.h"
 
 
 
@@ -70,6 +71,7 @@ void cellar2::Enter()
     sf::Vector2f center({ 348.f, 460.f });//수정
 
     player->SetPosition(center);
+    player->ApplyStateTexture();
     uiView.setSize(size);
     uiView.setCenter(center);
     worldView.setSize(size);
@@ -281,7 +283,8 @@ void cellar2::ChangePlayerState()
     {
         std::cout << "텍스처 로드 성공" << std::endl;
     }
-
+    AniPlayer::hasBulb = true;  // 상태 갱신
+    player->ApplyStateTexture();
     // 예를 들어 idleNico 로 변경
     sf::Texture& newTexture = TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png");
     player->SetStaticTexture(TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png"));

@@ -3,6 +3,7 @@
 #include "Animator.h"
 #include "GameState.h"
 
+bool AniPlayer::hasBulb = false;
 AniPlayer::AniPlayer(const std::string& name)
 	: GameObject(name)
 {
@@ -167,7 +168,7 @@ void AniPlayer::SetStaticTexture(const sf::Texture& texture)
 
 void AniPlayer::ApplyStateTexture()
 {
-	if (GameState::playerState == PlayerState::HoldingBulb)
+	if (hasBulb)
 	{
 		SetAnimationTexture(TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png"));
 	}

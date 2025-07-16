@@ -84,10 +84,10 @@ void cellar::Enter()
 }
 void cellar::Update(float dt)
 {
-    if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
-    {
-        SCENE_MGR.ChangeScene(SceneIds::LivingRoom);  // ESC 누르면 거실로 돌아감
-    }
+    //if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
+    //{
+    //    SCENE_MGR.ChangeScene(SceneIds::LivingRoom);  // ESC 누르면 거실로 돌아감
+    //}
     if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
     {
         return;
@@ -106,6 +106,15 @@ void cellar::Update(float dt)
     // 예시: 플레이어 따라 worldView 이동
     sf::Vector2f playerPos = player->GetPosition();
     worldView.setCenter(playerPos);
+    if (playerPos.x >= 330 && playerPos.x <= 350 &&
+        playerPos.y >= 230 && playerPos.y <= 250)
+    {
+        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+        {
+
+            SCENE_MGR.ChangeScene(SceneIds::LivingRoom);
+        }
+    }
     //지하실문 열기
     if (playerPos.x >= 850 && playerPos.x <= 930 &&
         playerPos.y >= 740 && playerPos.y <= 780)
