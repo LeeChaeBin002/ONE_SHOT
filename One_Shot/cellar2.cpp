@@ -1,42 +1,37 @@
 #include "stdafx.h"
-#include "cellar.h"
-#include "livingRoom.h"
+#include "cellar2.h"
+#include "SpriteGo.h"
 
-cellar::cellar():Scene(SceneIds::cellar)
+cellar2::cellar2():Scene(SceneIds::cellar2)
 {
-   
 }
-void cellar::Init()
+void cellar2::Init()
 {
     soundIds.push_back("Audio/BGM/SomeplaceIKnow.ogg");
-    texIds.push_back("graphics/Tilesets/dark_stairs.png");
+    texIds.push_back("graphics/Tilesets/dark_stairs2.png");
     texIds.push_back("graphics/Characters/niko.png");
     fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
-
-    if (!ANI_CLIP_MGR.Exists("idleNico")) 
+    if (!ANI_CLIP_MGR.Exists("idleNico"))
     {
         ANI_CLIP_MGR.Load("animations/idleNico.csv");
     }
 
-    if (!TEXTURE_MGR.Load("graphics/Tilesets/dark_stairs.png"))
+    if (!TEXTURE_MGR.Load("graphics/Tilesets/dark_stairs2.png"))
     {
         std::cerr << "Cellar 배경 텍스처 로드 실패" << std::endl;
     }
-    SpriteGo* cellarBg = new SpriteGo("graphics/Tilesets/dark_stairs.png", "CellarBg");
-    
-    Utils::SetOrigin(cellarBg->GetSprite(), Origins::TL);
-    
+    SpriteGo* cellar2Bg = new SpriteGo("graphics/Tilesets/dark_stairs2.png", "Cellar2Bg");
+    Utils::SetOrigin(cellar2Bg->GetSprite(), Origins::MC);
+
     auto windowSize = FRAMEWORK.GetWindowSizeF();
-    cellarBg->SetPosition({ windowSize.x * 0.5f, windowSize.y * 0.5f });
-    
-    AddGameObject(cellarBg);
+    cellar2Bg->SetPosition({ windowSize.x * 0.5f, windowSize.y * 0.5f });
+    AddGameObject(cellar2Bg);
 
     TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-    go->SetString("cellar");
+    go->SetString("cellar2");
     go->SetCharacterSize(30);
     go->SetFillColor(sf::Color::White);
-    //go->SetOrigin(Origins::TL); // 추가
-    go->SetPosition({ 20.f, 0.f }); // 추가, 여백
+    go->SetPosition({ 20.f, 0.f });
     go->sortingLayer = SortingLayers::UI;
     go->sortingOrder = 0;
     AddGameObject(go);
@@ -62,12 +57,12 @@ void cellar::Init()
 
     Scene::Init();
 }
-void cellar::Enter()
+void cellar2::Enter()
 {
     Scene::Enter();
 
     auto size = FRAMEWORK.GetWindowSizeF();
-    sf::Vector2f center({ 335.f, 235.f });
+    sf::Vector2f center({ 335.f, 235.f });//수정
 
     player->SetPosition(center);
     uiView.setSize(size);
@@ -79,13 +74,13 @@ void cellar::Enter()
     MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
 
     positionSet = false;
-    
+
 }
-void cellar::Update(float dt)
+void cellar2::Update(float dt)
 {
     if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
     {
-        SCENE_MGR.ChangeScene(SceneIds::LivingRoom);  // ESC 누르면 거실로 돌아감
+        SCENE_MGR.ChangeScene(SceneIds::cellar);  // ESC 누르면 지하실1로 돌아감
     }
     if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
     {
@@ -107,46 +102,41 @@ void cellar::Update(float dt)
     worldView.setCenter(playerPos);
     //지하실문 열기
     if (playerPos.x >= 850 && playerPos.x <= 930 &&
-        playerPos.y >= 740 && playerPos.y <= 780)
+        playerPos.y >= 780 && playerPos.y <= 830)
     {
         if (InputMgr::GetKeyDown(sf::Keyboard::Z))
         {
 
-            SCENE_MGR.ChangeScene(SceneIds::cellar2);
+            SCENE_MGR.ChangeScene(SceneIds::cellar);
         }
     }
 
     if (!positionSet)
     {
-        if (SCENE_MGR.GetPreviousScene() == SceneIds::LivingRoom)
+        if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
         {
-            // 거실에서 온경우
-            player->SetPosition({ 335.f, 235.f });
+            // 지하실에서 온경우
+            player->SetPosition({ 348.f, 460.f });
         }
-        
+
         positionSet = true;
 
 
 
     }
-
 }
-void cellar::Draw(sf::RenderWindow& window)
+void cellar2::Draw(sf::RenderWindow& window)
 {
     window.setView(worldView);
     Scene::Draw(window);  // Scene 내부에 player 그리는지 확인
-   
+
     window.setView(uiView);
 }
-void cellar::Release()
+void cellar2::Release()
 {
 
 }
-void cellar::screenchange(const std::string& msg)
-{
-
-}
-void cellar::Exit()
+void cellar2::Exit()
 {
     bgm.stop(); // 음악 정지
     positionSet = false;

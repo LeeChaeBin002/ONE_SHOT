@@ -27,6 +27,7 @@ enum class SceneIds
 	Computer,
 	LivingRoom,
 	cellar,
+	cellar2,
 	Setting,
 	Stage1,
 	Count,

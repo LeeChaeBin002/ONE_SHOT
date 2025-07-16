@@ -121,7 +121,7 @@ void LivingRoom::Update(float dt)
         if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
         {
             // 지하실에서 올라온 경우
-            player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 260.f });
+            player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 250.f });
         }
         else
         {

@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "LivingRoom.h"
 #include "cellar.h"
+#include "cellar2.h"
+
 
 
 const sf::View& SceneMgr::GetCurrentWorldView() const
@@ -20,10 +22,10 @@ void SceneMgr::Init()
 	scenes.push_back(new Computer());
 	scenes.push_back(new LivingRoom());
 	scenes.push_back(new cellar());
+	scenes.push_back(new cellar2());
 	scenes.push_back(new Setting());
 	scenes.push_back(new Stage1());
-	
-	//ChangeScene(SceneIds::Room);
+
 
 	for (auto scene : scenes)
 	{
