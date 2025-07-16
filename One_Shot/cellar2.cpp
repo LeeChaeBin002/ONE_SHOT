@@ -26,7 +26,7 @@ void cellar2::Init()
     {
         std::cerr << "Cellar 배경 텍스처 로드 실패" << std::endl;
     }
-    SpriteGo* cellar2Bg = new SpriteGo("graphics/Tilesets/dark_stairs2.png", "Cellar2Bg");
+    cellar2Bg = new SpriteGo("graphics/Tilesets/dark_stairs2.png", "Cellar2Bg");
     Utils::SetOrigin(cellar2Bg->GetSprite(), Origins::MC);
 
     auto windowSize = FRAMEWORK.GetWindowSizeF();
@@ -275,6 +275,10 @@ void cellar2::UpdateSpritePosition()
 
 void cellar2::ChangePlayerState()
 {
+    if (cellar2Bg != nullptr)
+    {
+        cellar2Bg->SetTexture("graphics/Tilesets/changed_map.png");
+    }
     if (!TEXTURE_MGR.Load("graphics/Characters/niko_bulb.png"))
     {
         std::cerr << "텍스처 로드 실패" << std::endl;
@@ -288,6 +292,17 @@ void cellar2::ChangePlayerState()
     // 예를 들어 idleNico 로 변경
     sf::Texture& newTexture = TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png");
     player->SetStaticTexture(TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png"));
+    //배경 변경
+    std::string newBgPath = "graphics/Tilesets/cellar2.png";
+    if (!TEXTURE_MGR.Load(newBgPath))
+    {
+        std::cerr << "새 배경 텍스처 로드 실패" << std::endl;
+    }
+    else
+    {
+        std::cout << "배경 텍스처 변경됨" << std::endl;
+        cellar2Bg->GetSprite().setTexture(TEXTURE_MGR.Get(newBgPath));
+    }
 
     // 혹은 위치 이동 등
     //player->SetPosition({ 500.f, 500.f });

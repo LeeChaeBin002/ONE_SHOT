@@ -1,5 +1,7 @@
 #pragma once
 #include "Scene.h"
+class SpriteGo;
+
 class cellar2 :
     public Scene
 {
@@ -18,7 +20,7 @@ protected:
 
 	std::vector<sf::Texture*> textures;
 	sf::Sprite sprite;
-
+	SpriteGo* cellar2Bg = nullptr;
 	int currentFrame = 0;
 	float frameTime = 0.f;
 	float frameDuration = 0.4f; // 프레임당 0.1초
