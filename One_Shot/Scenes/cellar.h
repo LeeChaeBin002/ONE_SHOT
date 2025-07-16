@@ -1,11 +1,13 @@
 #pragma once
 #include "Scene.h"
+#include "SpriteGo.h"
 class cellar : public Scene
 {
 protected:
     
     AniPlayer* player = nullptr;
     sf::Sound bgm;
+    SpriteGo* cellarBg = nullptr;
 
     sf::Sprite background;
     bool positionSet = false;
@@ -22,6 +24,7 @@ public:
     void Release() override;
     void screenchange(const std::string& msg);
     void Exit()override;
+
 
 };
 

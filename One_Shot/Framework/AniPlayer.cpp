@@ -178,3 +178,9 @@ void AniPlayer::ApplyStateTexture()
 	}
 }
 
+void AniPlayer::Setstate(PlayerState newState)
+{
+	state = newState;
+	ApplyStateTexture();
+}
+

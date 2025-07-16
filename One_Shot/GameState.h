@@ -3,5 +3,6 @@ class GameState
 {
 public:
 	static PlayerState playerState;
+
 };
 

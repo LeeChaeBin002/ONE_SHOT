@@ -18,10 +18,12 @@ protected:
 	float speed = 200.f;
 	float animationTime = 0.f;  // 애니메이션 경과 시간
 	int currentFrame = 0;
+	PlayerState state = PlayerState::Default;
 
 public:
 	static bool hasBulb;
 	sf::Sprite& GetSprite() { return sprite; }
+	PlayerState GetState() const { return state; }
 	AniPlayer(const std::string& name = "");
 	~AniPlayer() = default;
 	void Init() override;
@@ -41,4 +43,6 @@ public:
 	sf::FloatRect GetGlobalBounds()const override;
 	void SetStaticTexture(const sf::Texture& texture);
 	void ApplyStateTexture();
+	void Setstate(PlayerState newState);
+	
 };

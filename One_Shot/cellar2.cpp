@@ -3,6 +3,7 @@
 #include "SpriteGo.h"
 #include "Framework.h"
 #include "AniPlayer.h"
+#include "GameState.h"
 
 
 
@@ -289,6 +290,8 @@ void cellar2::ChangePlayerState()
     }
     AniPlayer::hasBulb = true;  // 상태 갱신
     player->ApplyStateTexture();
+    player->Setstate(PlayerState::HoldingBulb);
+    GameState::playerState = PlayerState::HoldingBulb;
     // 예를 들어 idleNico 로 변경
     sf::Texture& newTexture = TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png");
     player->SetStaticTexture(TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png"));
@@ -304,7 +307,6 @@ void cellar2::ChangePlayerState()
         cellar2Bg->GetSprite().setTexture(TEXTURE_MGR.Get(newBgPath));
     }
 
-    // 혹은 위치 이동 등
-    //player->SetPosition({ 500.f, 500.f });
+   
     std::cout << "애니메이션 종료 후 캐릭터 상태 변경" << std::endl;
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "cellar.h"
 #include "livingRoom.h"
+#include "GameState.h"
 
 cellar::cellar():Scene(SceneIds::cellar)
 {
@@ -22,7 +23,7 @@ void cellar::Init()
     {
         std::cerr << "Cellar 배경 텍스처 로드 실패" << std::endl;
     }
-    SpriteGo* cellarBg = new SpriteGo("graphics/Tilesets/dark_stairs.png", "CellarBg");
+    cellarBg = new SpriteGo("graphics/Tilesets/dark_stairs.png", "CellarBg");
     
     Utils::SetOrigin(cellarBg->GetSprite(), Origins::TL);
     
@@ -68,7 +69,7 @@ void cellar::Enter()
 
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center({ 335.f, 235.f });
-
+    if (player && player->GetState() == PlayerState::HoldingBulb)
     player->SetPosition(center);
     player->ApplyStateTexture();
     uiView.setSize(size);
@@ -80,6 +81,20 @@ void cellar::Enter()
     MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
 
     positionSet = false;
+
+    if (GameState::playerState == PlayerState::HoldingBulb)
+    {
+        std::string brightBgPath = "graphics/Tilesets/light_stairs.png";
+        if (!TEXTURE_MGR.Load(brightBgPath))
+        {
+            std::cerr << "밝은 계단 배경 텍스처 로드 실패" << std::endl;
+        }
+        else
+        {
+            cellarBg->GetSprite().setTexture(TEXTURE_MGR.Get(brightBgPath));
+            std::cout << "전구 들고 있음 → 지하실 밝은 배경 적용" << std::endl;
+        }
+    }
     
 }
 void cellar::Update(float dt)
