@@ -123,6 +123,11 @@ void cellar::Update(float dt)
             // 거실에서 온경우
             player->SetPosition({ 335.f, 235.f });
         }
+        if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar2)
+        {
+            // 지하실2에서 온경우
+            player->SetPosition({ 870.f, 750.f });
+        }
         
         positionSet = true;
 

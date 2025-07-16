@@ -101,8 +101,8 @@ void cellar2::Update(float dt)
     sf::Vector2f playerPos = player->GetPosition();
     worldView.setCenter(playerPos);
     //지하실문 열기
-    if (playerPos.x >= 850 && playerPos.x <= 930 &&
-        playerPos.y >= 780 && playerPos.y <= 830)
+    if (playerPos.x >= 350 && playerPos.x <= 400 &&
+        playerPos.y >= 440 && playerPos.y <= 480)
     {
         if (InputMgr::GetKeyDown(sf::Keyboard::Z))
         {
