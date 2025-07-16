@@ -1,12 +1,17 @@
 #include "stdafx.h"
 #include "cellar2.h"
 #include "SpriteGo.h"
+#include "Framework.h"
+
+
 
 cellar2::cellar2():Scene(SceneIds::cellar2)
 {
 }
+
 void cellar2::Init()
 {
+    InitAnimation();
     soundIds.push_back("Audio/BGM/SomeplaceIKnow.ogg");
     texIds.push_back("graphics/Tilesets/dark_stairs2.png");
     texIds.push_back("graphics/Characters/niko.png");
@@ -62,7 +67,7 @@ void cellar2::Enter()
     Scene::Enter();
 
     auto size = FRAMEWORK.GetWindowSizeF();
-    sf::Vector2f center({ 335.f, 235.f });//수정
+    sf::Vector2f center({ 348.f, 460.f });//수정
 
     player->SetPosition(center);
     uiView.setSize(size);
@@ -78,6 +83,8 @@ void cellar2::Enter()
 }
 void cellar2::Update(float dt)
 {
+    
+   
     if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
     {
         SCENE_MGR.ChangeScene(SceneIds::cellar);  // ESC 누르면 지하실1로 돌아감
@@ -100,6 +107,8 @@ void cellar2::Update(float dt)
     // 예시: 플레이어 따라 worldView 이동
     sf::Vector2f playerPos = player->GetPosition();
     worldView.setCenter(playerPos);
+    //std::cout << "worldView center: " << worldView.getCenter().x << ", " << worldView.getCenter().y << std::endl;
+
     //지하실문 열기
     if (playerPos.x >= 350 && playerPos.x <= 400 &&
         playerPos.y >= 440 && playerPos.y <= 480)
@@ -110,6 +119,16 @@ void cellar2::Update(float dt)
             SCENE_MGR.ChangeScene(SceneIds::cellar);
         }
     }
+    if (playerPos.x >= 1060 && playerPos.x <= 1080 &&
+        playerPos.y >= 440 && playerPos.y <= 480)
+    {
+        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+        {
+          
+            PlayAnimation();
+        }
+        
+    }
 
     if (!positionSet)
     {
@@ -118,19 +137,58 @@ void cellar2::Update(float dt)
             // 지하실에서 온경우
             player->SetPosition({ 348.f, 460.f });
         }
-
         positionSet = true;
 
 
+        if (!isPlaying) return;
+    }
+
+    if (isPlaying)
+    {
+      
+        frameTime += dt;
+        if (frameTime >= frameDuration)
+        {
+            frameTime = 0.f;
+            currentFrame++;
+            if (currentFrame >= textures.size())
+            {
+                isPlaying = false; // 끝나면 중단
+                currentFrame = textures.size() - 1; // 마지막 프레임 유지
+            
+                sprite.setTexture(*textures[currentFrame]);
+                UpdateSpritePosition();
+            }
+          
+            
+                sprite.setTexture(*textures[currentFrame]);
+                // 다시 스케일 및 위치 적용
+                sf::Vector2u texSize = textures[currentFrame]->getSize();
+                sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
+
+                float scaleX = windowSize.x / texSize.x;
+                float scaleY = windowSize.y / texSize.y;
+                float scale = std::max(scaleX, scaleY);
+                sprite.setScale(scale, scale);
+
+                sprite.setOrigin(texSize.x / 2.f, texSize.y / 2.f);
+                sprite.setPosition(windowSize.x / 2.f+offsetX, windowSize.y / 2.f+offsetY);
+        }
 
     }
+       
 }
 void cellar2::Draw(sf::RenderWindow& window)
 {
     window.setView(worldView);
-    Scene::Draw(window);  // Scene 내부에 player 그리는지 확인
+    Scene::Draw(window);
+    window.setView(uiView);  // UI 뷰에서 그리기
+    if (isPlaying && !textures.empty())
+    {
+        window.draw(sprite);
+    }
 
-    window.setView(uiView);
+  
 }
 void cellar2::Release()
 {
@@ -141,4 +199,77 @@ void cellar2::Exit()
     bgm.stop(); // 음악 정지
     positionSet = false;
     Scene::Exit();
+}
+void cellar2::InitAnimation()
+{
+    
+    for (int i = 0; i < 10; ++i)
+    {
+        std::string path = "graphics/Pictures/b" + std::to_string(i) + ".png";
+
+        if (!TEXTURE_MGR.Load(path))
+        {
+            std::cerr << "Failed to load " << path << std::endl;
+            continue;
+        }
+
+        sf::Texture* texture = &TEXTURE_MGR.Get(path);
+        if (texture == nullptr)
+        {
+            std::cerr << "Failed to get texture: " << path << std::endl;
+            continue;
+        }
+
+        textures.push_back(texture);
+    }
+
+    if (!textures.empty())
+    {
+        sprite.setTexture(*textures[0]);
+        Utils::SetOrigin(sprite, Origins::MC);
+    }
+
+}
+void cellar2::PlayAnimation()
+{
+
+    //sprite.setPosition(worldView.getCenter());
+    //std::cout << "PlayAnimation 호출됨! textures size: " << textures.size() << std::endl;
+    //std::cout << "textures size: " << textures.size() << std::endl;
+
+    if (textures.empty())
+    {
+        std::cerr << "PlayAnimation 호출 전에 InitAnimation을 호출하세요!" << std::endl;
+        return;
+    }
+    isPlaying = true;
+    currentFrame = 0;
+    frameTime = 0.f;
+
+    sprite.setTexture(*textures[currentFrame]);
+    UpdateSpritePosition();
+
+    sf::Vector2u texSize = textures[currentFrame]->getSize();
+    sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
+    float scaleX = windowSize.x / texSize.x;
+    float scaleY = windowSize.y / texSize.y;
+    float scale = std::max(scaleX, scaleY);
+    sprite.setScale(scale, scale);
+    // 중앙에 배치
+    sprite.setOrigin(texSize.x / 2.f, texSize.y / 2.f);
+    sprite.setPosition(windowSize.x / 2.f + offsetX, windowSize.y / 2.f+ offsetY);
+}
+
+void cellar2::UpdateSpritePosition()
+{
+    sf::Vector2u texSize = textures[currentFrame]->getSize();
+    sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
+
+    float scaleX = windowSize.x / texSize.x;
+    float scaleY = windowSize.y / texSize.y;
+    float scale = std::max(scaleX, scaleY);
+    sprite.setScale(scale, scale);
+
+    sprite.setOrigin(texSize.x / 2.f, texSize.y / 2.f);
+    sprite.setPosition(windowSize.x / 2.f + offsetX, windowSize.y / 2.f + offsetY);
 }

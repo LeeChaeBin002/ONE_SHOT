@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Defines.h"
 #define DEF_DEV
 
 enum class SortingLayers
@@ -7,7 +7,7 @@ enum class SortingLayers
 	Background,
 	Foreground,
 	Default,
-	UI,
+	UI
 };
 
 enum class Origins
@@ -30,12 +30,18 @@ enum class SceneIds
 	cellar2,
 	Setting,
 	Stage1,
-	Count,
+	Count
+};
+
+enum class Cellar2State
+{
+	Default,
+	SecretAnimation
 };
 
 enum class Sides
 {
 	Left,
 	Right,
-	None,
+	None
 };
