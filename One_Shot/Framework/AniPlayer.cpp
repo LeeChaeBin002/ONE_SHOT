@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "AniPlayer.h"
 #include "Animator.h"
+#include "GameState.h"
 
 AniPlayer::AniPlayer(const std::string& name)
 	: GameObject(name)
@@ -26,6 +27,15 @@ void AniPlayer::SetScale(const sf::Vector2f& s)
 	body.setScale(scale);
 }
 
+
+
+void AniPlayer::SetAnimationTexture(const sf::Texture& texture)
+{
+	currentTexture = const_cast<sf::Texture*>(&texture);
+	body.setTexture(*currentTexture);
+	body.setTextureRect(sf::IntRect(0, 0, 48, 64));  // 프레임 크기 맞게
+}
+
 void AniPlayer::SetOrigin(Origins preset)
 {
 	originPreset = preset;
@@ -44,6 +54,13 @@ void AniPlayer::SetOrigin(const sf::Vector2f& newOrigin)
 void AniPlayer::Init()
 {
 	animator.SetTarget(&body);
+	if (currentTexture == nullptr)
+	{
+	TEXTURE_MGR.Load("graphics/Characters/niko.png");
+	currentTexture = &TEXTURE_MGR.Get("graphics/Characters/niko.png");
+
+	}
+	body.setTexture(*currentTexture);
 }
 
 void AniPlayer::Release()
@@ -54,8 +71,13 @@ void AniPlayer::Reset()
 
 {
 	body.setOrigin(24.f, 32.f); // 48 / 2, 64 / 2
-	TEXTURE_MGR.Load("graphics/Characters/niko.png");
-	body.setTexture(TEXTURE_MGR.Get("graphics/Characters/niko.png"));
+	if (currentTexture != nullptr)
+	{
+		body.setTexture(*currentTexture);
+		//TEXTURE_MGR.Load("graphics/Characters/niko_bulb.png");
+		//currentTexture = &TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png");
+	}
+	//body.setTexture(TEXTURE_MGR.Get("graphics/Characters/niko.png"));
 	body.setTextureRect(sf::IntRect(0, 0, 48, 64)); // x, y, width, height
 
 
@@ -126,7 +148,32 @@ void AniPlayer::Draw(sf::RenderWindow& window)
 	}
 		window.draw(body);
 }
+void AniPlayer::play(const std::string& animationId)
+{
+}
 sf::FloatRect AniPlayer::GetGlobalBounds()const
 {
 	return body.getGlobalBounds();
 }
+
+void AniPlayer::SetStaticTexture(const sf::Texture& texture)
+{
+	currentTexture = const_cast<sf::Texture*>(&texture);
+	body.setTexture(*currentTexture);
+	body.setTextureRect(sf::IntRect(0, 0, 48, 64)); 
+	body.setOrigin(24.f, 32.f); // 중심 맞추기
+
+}
+
+void AniPlayer::ApplyStateTexture()
+{
+	if (GameState::playerState == PlayerState::HoldingBulb)
+	{
+		SetAnimationTexture(TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png"));
+	}
+	else
+	{
+		SetAnimationTexture(TEXTURE_MGR.Get("graphics/Characters/niko.png"));
+	}
+}
+

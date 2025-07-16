@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cellar2.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Scenes\cellar.cpp" />
     <ClCompile Include="Scenes\Computer.cpp" />
     <ClCompile Include="Framework\AniPlayer.cpp" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cellar2.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="Scenes\cellar.h" />
     <ClInclude Include="Scenes\Computer.h" />
     <ClInclude Include="Framework\AniPlayer.h" />

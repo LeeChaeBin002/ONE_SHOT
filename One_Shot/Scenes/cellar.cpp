@@ -70,6 +70,7 @@ void cellar::Enter()
     sf::Vector2f center({ 335.f, 235.f });
 
     player->SetPosition(center);
+    player->ApplyStateTexture();
     uiView.setSize(size);
     uiView.setCenter(center);
     worldView.setSize(size);

@@ -158,6 +158,7 @@ void cellar2::Update(float dt)
             
                 sprite.setTexture(*textures[currentFrame]);
                 UpdateSpritePosition();
+                ChangePlayerState();
             }
           
             
@@ -233,10 +234,6 @@ void cellar2::InitAnimation()
 void cellar2::PlayAnimation()
 {
 
-    //sprite.setPosition(worldView.getCenter());
-    //std::cout << "PlayAnimation 호출됨! textures size: " << textures.size() << std::endl;
-    //std::cout << "textures size: " << textures.size() << std::endl;
-
     if (textures.empty())
     {
         std::cerr << "PlayAnimation 호출 전에 InitAnimation을 호출하세요!" << std::endl;
@@ -272,4 +269,24 @@ void cellar2::UpdateSpritePosition()
 
     sprite.setOrigin(texSize.x / 2.f, texSize.y / 2.f);
     sprite.setPosition(windowSize.x / 2.f + offsetX, windowSize.y / 2.f + offsetY);
+}
+
+void cellar2::ChangePlayerState()
+{
+    if (!TEXTURE_MGR.Load("graphics/Characters/niko_bulb.png"))
+    {
+        std::cerr << "텍스처 로드 실패" << std::endl;
+    }
+    else
+    {
+        std::cout << "텍스처 로드 성공" << std::endl;
+    }
+
+    // 예를 들어 idleNico 로 변경
+    sf::Texture& newTexture = TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png");
+    player->SetStaticTexture(TEXTURE_MGR.Get("graphics/Characters/niko_bulb.png"));
+
+    // 혹은 위치 이동 등
+    //player->SetPosition({ 500.f, 500.f });
+    std::cout << "애니메이션 종료 후 캐릭터 상태 변경" << std::endl;
 }

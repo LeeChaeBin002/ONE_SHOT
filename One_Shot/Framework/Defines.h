@@ -45,3 +45,8 @@ enum class Sides
 	Right,
 	None
 };
+enum class PlayerState
+{
+	Default,
+	HoldingBulb
+};

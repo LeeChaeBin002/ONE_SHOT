@@ -14,6 +14,7 @@ protected:
 	bool canAccesscellar = false;
 	Cellar2State state = Cellar2State::Default;
 	void UpdateSpritePosition();
+	void ChangePlayerState();
 
 	std::vector<sf::Texture*> textures;
 	sf::Sprite sprite;
