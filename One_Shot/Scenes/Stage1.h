@@ -4,7 +4,12 @@ class Stage1 :
     public Scene
 {
 protected:
+	AniPlayer* player = nullptr;
+	sf::Sound bgm;
 
+	sf::Sprite background;
+	bool positionSet = false;
+	TextGo* messageText = nullptr;
 public:
     Stage1();
     ~Stage1()override = default;

@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "livingRoom.h"
+#include "SpriteGo.h"
 
 LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
 {
@@ -117,7 +118,7 @@ void LivingRoom::Update(float dt)
         }
     }
     //밖으로 나가기
-    if (playerPos.x >= 120 && playerPos.x <= 150 &&
+    if (playerPos.x >= 140 && playerPos.x <= 180 &&
         playerPos.y >= 230 && playerPos.y <= 250)
     {
         if (InputMgr::GetKeyDown(sf::Keyboard::Z))
@@ -140,9 +141,6 @@ void LivingRoom::Update(float dt)
             player->SetPosition({ 308.f, 180.f });
         }
         positionSet = true;
-
- 
-       
     }
 
     if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))

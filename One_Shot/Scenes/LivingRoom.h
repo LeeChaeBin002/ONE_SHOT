@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "AniPlayer.h"
 #include "TextGo.h"
-#include "SpriteGo.h"
+
 
 class LivingRoom : public Scene
 {

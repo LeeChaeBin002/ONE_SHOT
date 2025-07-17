@@ -97,7 +97,7 @@ void building::Update(float dt)
 
     //밖으로 나가기(수정)
     if (playerPos.x >= 530 && playerPos.x <= 590 &&
-        playerPos.y >= 150 && playerPos.y <= 200)
+        playerPos.y >= 100 && playerPos.y <= 150)
     {
         if (InputMgr::GetKeyDown(sf::Keyboard::Z))
         {
@@ -108,10 +108,10 @@ void building::Update(float dt)
 
     if (!positionSet)
     {
-        if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
+        if (SCENE_MGR.GetPreviousScene() == SceneIds::Stage1)
         {
             // 밖에서 온 경우
-            player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 250.f });
+            player->SetPosition({ 560.f, 170.f });
         }
         else
         {
@@ -124,10 +124,10 @@ void building::Update(float dt)
 
     }
 
-    //if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
-    //{
-    //    SCENE_MGR.ChangeScene(SceneIds::Room);  // 예시: 방으로 돌아가기
-    //}
+    if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
+    {
+        SCENE_MGR.ChangeScene(SceneIds::LivingRoom);  // 예시: 방으로 돌아가기
+    }
     Scene::Update(dt);
 
 }
@@ -154,9 +154,6 @@ void building::ShowMessage(const std::string& msg)
 }
 void building::Exit()
 {
-    bgm.stop(); // 음악 정지
-    positionSet = false;
-    Scene::Exit(); // 부모 클래스 Exit 호출 (리소스 언로드 등)
-
+ 
 
 }
