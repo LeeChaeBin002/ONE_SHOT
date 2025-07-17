@@ -18,6 +18,7 @@ protected:
 	float speed = 200.f;
 	float animationTime = 0.f;  // 애니메이션 경과 시간
 	int currentFrame = 0;
+	float animationSpeed = 1.0f;
 	PlayerState state = PlayerState::Default;
 
 public:
@@ -44,5 +45,6 @@ public:
 	void SetStaticTexture(const sf::Texture& texture);
 	void ApplyStateTexture();
 	void Setstate(PlayerState newState);
+	void SetAnimationSpeed(float s) { animationSpeed = s; }
 	
 };

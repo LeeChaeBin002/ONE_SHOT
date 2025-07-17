@@ -13,17 +13,40 @@ Room::Room() :Scene(SceneIds::Room)
 
 void Room::Init()
 {
-	
+
+	texIds.push_back("graphics/Pictures/ko/instruction1.png");
+	texIds.push_back("graphics/Pictures/ko/instruction2.png");
+	texIds.push_back("graphics/Pictures/ko/instruction3.png");
+	texIds.push_back("graphics/Pictures/ko/instruction4.png");
+	// instruction 이미지 로드
+	for (int i = 1; i <= 4; ++i)
+	{
+		std::string texPath = "graphics/Pictures/ko/instruction" + std::to_string(i)+".png";
+		SpriteGo* instruction = new SpriteGo(texPath);
+		instruction->SetPosition({ FRAMEWORK.GetWindowSizeF().x * 0.5f, FRAMEWORK.GetWindowSizeF().y * 0.5f });
+		instruction->SetOrigin(Origins::MC);
+		if (!TEXTURE_MGR.Load(texPath))
+		{
+			std::cerr << "Failed to load instruction texture: " << texPath << std::endl;
+		}
+		else
+		{
+			auto texture = TEXTURE_MGR.Get(texPath);
+			instruction->GetSprite().setTexture(texture);
+			float scaleX = FRAMEWORK.GetWindowSizeF().x / texture.getSize().x;
+			float scaleY = FRAMEWORK.GetWindowSizeF().y / texture.getSize().y;
+			instruction->SetScale({ scaleX, scaleY });
+		}
+		instruction->SetActive(false); // 처음에는 안 보이게
+		AddGameObject(instruction);
+		instructions.push_back(instruction);
+	}
+
 	texIds.push_back("graphics/Tilesets/niko_room.png");
 	texIds.push_back("graphics/Icons/item_start_remote.png");
 	texIds.push_back("graphics/Characters/niko.png");
 	fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
 	
-	// �̶� �� ���� �ε�
-	if (!ANI_CLIP_MGR.Exists("idleNico")) // ���� Ȯ�� �� �ε�
-	{
-		ANI_CLIP_MGR.Load("animations/idleNico.csv");
-	}
 	// niko_room.png�� ������� �߰�
 	SpriteGo* roomBg = new SpriteGo("graphics/Tilesets/niko_room.png","NikoRoom");
 	roomBg->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
@@ -51,7 +74,8 @@ void Room::Init()
 
 	player = new AniPlayer("player");
 	player->SetPosition({ 0.f,0.f });
-	player->SetSpeed(300.f);
+	player->SetSpeed(100.f);
+	player->SetAnimationSpeed(1.0f);
 	player->Reset();
 	player->ApplyStateTexture();
 	AddGameObject(player);
@@ -60,6 +84,28 @@ void Room::Init()
 }
 void Room::Enter()
 {
+	// 기존 코드
+	Scene::Enter();
+
+	if (SCENE_MGR.GetPreviousScene() == SceneIds::Title)
+	{
+		isShowingInstruction = true;
+		instructionIndex = 0;
+
+		if (!instructions.empty())
+		{
+			instructions[instructionIndex]->SetActive(true);
+		}
+		MUSIC_MGR.StopBGM();  // 기존 BGM 중단
+	}
+	else
+	{
+		isShowingInstruction = false;
+		MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+	
+	}
+
+
 	auto size = FRAMEWORK.GetWindowSizeF();
 	sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
 	uiView.setSize(size);
@@ -67,14 +113,19 @@ void Room::Enter()
 	worldView.setSize(size);
 	worldView.setCenter(center);
 	positionSet = false;
+
+	
+
+
+	for (auto obj : gameObjects)
+	{
+		obj->Reset();
+	}
+
+	
 	player->ApplyStateTexture();
 	Scene::Enter();
 	// ���⼭ ĳ����, �������� ��ġ ���� ����
-
-	messageText->SetString("");
-	MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
-	
-	bgm.play();
 	for (auto obj : gameObjects)
 	{
 		if (obj->GetName() == "player")
@@ -95,9 +146,62 @@ void Room::Enter()
 	player->ApplyStateTexture(); 
 }
 void Room::Update(float dt)
-{// ù ��° Update������ ��ġ ����
+{
 	//messageText->SetString("창문 밖에 뭔가 보인다");
+	if (isShowingInstruction)
+	{
+		if (InputMgr::GetKeyDown(sf::Keyboard::Space))
+		{
+			// 페이지별 효과음 파일 경로 설정
+			std::string soundPath;
+			switch (instructionIndex)
+			{
+			case 0:
+				soundPath = "Audio/ME/instruction1.wav";
+				break;
+			case 1:
+				soundPath = "Audio/ME/instruction2.wav";
+				break;
+			case 2:
+				soundPath = "Audio/ME/instruction3.wav";
+				break;
+			case 3:
+				soundPath = "";
+				break;
+			default:
+				soundPath = "";
+				break;
+			}
 
+			if (!soundPath.empty())
+			{
+				if (!SOUNDBUFFER_MGR.Exists(soundPath))
+				{
+					SOUNDBUFFER_MGR.Load(soundPath);
+				}
+				instructionEffect.setBuffer(SOUNDBUFFER_MGR.Get(soundPath));
+				instructionEffect.play();
+			}
+
+			instructions[instructionIndex]->SetActive(false); // 현재꺼 끄고
+			instructionIndex++;
+
+			if (instructionIndex < instructions.size())
+			{
+				instructions[instructionIndex]->SetActive(true);
+			}
+			else
+			{
+				isShowingInstruction = false; // 전부 다 봤음
+				MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+			}
+		}
+
+		return; // instruction 보는 중엔 다른 Update 로직 실행 XX
+	}
+
+	// 기존 플레이어 이동, 체크 등등...
+	Scene::Update(dt);
 	if (!player) return;
 
 	sf::Vector2f playerPos = player->GetPosition();
@@ -164,6 +268,7 @@ void Room::Draw(sf::RenderWindow& window)
 	{
 		obj->Draw(window);
 	}
+	
 
 	// UI �׸���
 	window.setView(uiView);
@@ -173,6 +278,11 @@ void Room::Draw(sf::RenderWindow& window)
 	if (messageText != nullptr && messageText->GetActive())
 	{
 		messageText->Draw(window);
+	}
+	// instruction 그리기
+	if (isShowingInstruction && instructionIndex < instructions.size())
+	{
+		instructions[instructionIndex]->Draw(window);
 	}
 
 	window.setView(defaultView);

@@ -11,7 +11,6 @@ protected:
     sf::Sprite spriteMode;
     TextGo* screen;
     TextGo* clickStart;
-    SceneIds changeScene = SceneIds::Mode;
     TextGo* messageText = nullptr;
     int selectedIndex = 0;
     std::vector<std::string> menuOptions = { "Start", "Setting", "Exit" };

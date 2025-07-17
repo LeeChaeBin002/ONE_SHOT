@@ -2,11 +2,16 @@
 #include "Scene.h"
 #include "Room.h"
 #include "TextGo.h"
+#include "SpriteGo.h"
+
 
 class Room :
     public Scene
 {
 protected:
+    int instructionIndex = 0;         // 현재 instruction 이미지 인덱스
+    bool isShowingInstruction = true; // instruction을 보여주는 중인지
+    std::vector<SpriteGo*> instructions;
 
     AniPlayer* player = nullptr;
     sf::Sound bgm;
@@ -18,7 +23,7 @@ protected:
   
     TextGo* messageText = nullptr;
     bool canAccessLivingRoom = false;
-    
+    sf::Sound instructionEffect;
 
 public:
     Room();

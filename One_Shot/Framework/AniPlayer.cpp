@@ -71,6 +71,8 @@ void AniPlayer::Release()
 void AniPlayer::Reset()
 
 {
+	velocity = { 0.f, 0.f };
+	gravity = { 0.f, 0.f };
 	body.setOrigin(24.f, 32.f); // 48 / 2, 64 / 2
 	if (currentTexture != nullptr)
 	{
@@ -100,7 +102,7 @@ void AniPlayer::Update(float dt)
 
 
 	// Animation timing
-	animationTime += dt;
+	animationTime += dt * animationSpeed;
 	const float frameDuration = 0.1f; // �ð��� ������ ���� �ӵ� (��)
 	if (animationTime >= frameDuration)
 	{

@@ -7,7 +7,7 @@ Title::Title() :Scene(SceneIds::Title)
 {
 }
 
-void Title::Init() 
+void Title::Init()
 {
 	
 	texIds.push_back("graphics/Titles/normal.png");
@@ -34,10 +34,11 @@ void Title::Init()
 	AddGameObject(titlebg);
 
 	clickStart = (TextGo*)AddGameObject(new TextGo("fonts/TerminusTTF-Bold.ttf"));
-	clickStart->SetString("Click to start");
-	clickStart->SetCharacterSize(50);
+	clickStart->SetString("");
+	UpdateMenuText();
+	clickStart->SetCharacterSize(25);
 	clickStart->SetFillColor(sf::Color::White);
-	clickStart->SetPosition({ 100.0f, 100.f });
+	clickStart->SetPosition({ 450.f, 380.f });
 
 	messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
 	messageText->SetCharacterSize(24);
@@ -67,13 +68,33 @@ void Title::Enter()
 }
 void Title::Update(float dt)
 {
-
-
-	if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+	if (InputMgr::GetKeyDown(sf::Keyboard::Down))
 	{
-
-		SCENE_MGR.ChangeScene(SceneIds::Room);
+		selectedIndex = (selectedIndex + 1) % menuOptions.size();
+		UpdateMenuText();
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::Up))
+	{
+		selectedIndex = (selectedIndex - 1 + menuOptions.size()) % menuOptions.size();
+		UpdateMenuText();
+	}
+
+	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+	{
+		switch (selectedIndex)
+		{
+		case 0:
+			SCENE_MGR.ChangeScene(SceneIds::Room);
+			break;
+		case 1:
+			std::cout << "¼³Á¤ ¼±ÅÃµÊ" << std::endl;
+			break;
+		case 2:
+			FRAMEWORK.GetWindow().close();
+			break;
+		}
+	}
+	
 	Scene::Update(dt);
 }
 void Title::Draw(sf::RenderWindow& window)
@@ -93,4 +114,21 @@ void Title::screenchange(const std::string& msg)
 		std::cerr << "Error: modetitle is not initialized!" << std::endl;
 		return;
 	}
+}
+
+void Title::UpdateMenuText()
+{
+	std::string menuText = "";
+	for (size_t i = 0; i < menuOptions.size(); ++i)
+	{
+		if (i == selectedIndex)
+		{
+			menuText += "-> " + menuOptions[i] + "\n";
+		}
+		else
+		{
+			menuText += " " + menuOptions[i] + "\n";
+		}
+	}
+	clickStart->SetString(menuText);
 }
