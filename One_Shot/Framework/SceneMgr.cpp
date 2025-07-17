@@ -6,6 +6,7 @@
 #include "LivingRoom.h"
 #include "cellar.h"
 #include "cellar2.h"
+#include "building.h"
 
 
 
@@ -23,8 +24,9 @@ void SceneMgr::Init()
 	scenes.push_back(new LivingRoom());
 	scenes.push_back(new cellar());
 	scenes.push_back(new cellar2());
-	scenes.push_back(new Setting());
+	scenes.push_back(new building());
 	scenes.push_back(new Stage1());
+	scenes.push_back(new Setting());
 
 
 	for (auto scene : scenes)

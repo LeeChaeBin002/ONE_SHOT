@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="building.cpp" />
     <ClCompile Include="cellar2.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Scenes\cellar.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Scenes\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="building.h" />
     <ClInclude Include="cellar2.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Scenes\cellar.h" />

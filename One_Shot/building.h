@@ -1,13 +1,19 @@
 #pragma once
 #include "Scene.h"
-class Stage1 :
+class building :
     public Scene
 {
 protected:
+	
+	AniPlayer* player = nullptr;
+	sf::Sound bgm;
 
+	sf::Sprite background;
+	bool positionSet = false;
+	TextGo* messageText = nullptr;
 public:
-    Stage1();
-    ~Stage1()override = default;
+    building();
+    ~building()override = default;
 	void Init() override;
 	void Enter() override;
 	void Update(float dt) override;

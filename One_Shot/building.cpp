@@ -1,13 +1,15 @@
 ﻿#include "stdafx.h"
-#include "livingRoom.h"
+#include "building.h"
+#include "SpriteGo.h"
 
-LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
+building::building():Scene(SceneIds::building)
 {
+
 }
-void LivingRoom::Init()
+void building::Init()
 {
     soundIds.push_back("Audio/BGM/SomeplaceIKnow.ogg");
-    texIds.push_back("graphics/Tilesets/living_room.png");
+    texIds.push_back("graphics/Tilesets/in_blue.png");
     texIds.push_back("graphics/Characters/niko.png");
     fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
 
@@ -16,17 +18,17 @@ void LivingRoom::Init()
         ANI_CLIP_MGR.Load("animations/idleNico.csv");
     }
 
-    if (!TEXTURE_MGR.Load("graphics/Tilesets/living_room.png"))
+    if (!TEXTURE_MGR.Load("graphics/Tilesets/in_blue.png"))
     {
         std::cerr << "LivingRoom 배경 텍스처 로드 실패" << std::endl;
     }
 
-    SpriteGo* LivingBg = new SpriteGo("graphics/Tilesets/living_room.png", "LivingRoomBg");
-    LivingBg->SetPosition({ 0.f, 0.f });
-    AddGameObject(LivingBg);
-    
+    SpriteGo* buildingBg = new SpriteGo("graphics/Tilesets/in_blue.png", "buildingBg");
+    buildingBg->SetPosition({ -30.f, -45.f });
+    AddGameObject(buildingBg);
+
     TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-    go->SetString("Living Room");
+    go->SetString("building");
     go->SetCharacterSize(30);
     go->SetFillColor(sf::Color::White);
     go->sortingLayer = SortingLayers::UI;
@@ -47,13 +49,13 @@ void LivingRoom::Init()
     player->ApplyStateTexture();
     player->SetSpeed(150.f);
     player->Reset();
-    AddGameObject(player); 
-    
-    
-    Scene::Init();
-}
+    AddGameObject(player);
 
-void LivingRoom::Enter()
+
+    Scene::Init();
+
+}
+void building::Enter()
 {
     Scene::Enter();
 
@@ -66,23 +68,21 @@ void LivingRoom::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-    MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+    //MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
     player->ApplyStateTexture();
     positionSet = false;
 }
-
-void LivingRoom::Update(float dt)
+void building::Update(float dt) 
 {
-
     if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
     {
-       return;
+        return;
     }
     // 마우스 위치를 world 좌표로 변환
     sf::Vector2i mousePixelPos = sf::Mouse::getPosition(FRAMEWORK.GetWindow());
     sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePixelPos, worldView);
 
-    
+
     if (!player) return;
 
 
@@ -95,35 +95,14 @@ void LivingRoom::Update(float dt)
     sf::Vector2f playerPos = player->GetPosition();
     worldView.setCenter(playerPos);
 
-
-    //니코방으로 돌아가기
-    if (playerPos.x >= 300  && playerPos.x <= 340 &&
-        playerPos.y >= 180 && playerPos.y <= 200)
+    //밖으로 나가기(수정)
+    if (playerPos.x >= 530 && playerPos.x <= 590 &&
+        playerPos.y >= 150 && playerPos.y <= 200)
     {
         if (InputMgr::GetKeyDown(sf::Keyboard::Z))
         {
 
-            SCENE_MGR.ChangeScene(SceneIds::Room);
-        }
-    }
-    //지하실 내려가기
-    if (playerPos.x >= 700 && playerPos.x <= 750 &&
-        playerPos.y >= 200 && playerPos.y <= 300)
-    {
-        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
-        {
-
-            SCENE_MGR.ChangeScene(SceneIds::cellar);
-        }
-    }
-    //밖으로 나가기
-    if (playerPos.x >= 120 && playerPos.x <= 150 &&
-        playerPos.y >= 230 && playerPos.y <= 250)
-    {
-        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
-        {
-
-            SCENE_MGR.ChangeScene(SceneIds::building);
+            SCENE_MGR.ChangeScene(SceneIds::Stage1);
         }
     }
 
@@ -131,28 +110,28 @@ void LivingRoom::Update(float dt)
     {
         if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
         {
-            // 지하실에서 올라온 경우
+            // 밖에서 온 경우
             player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 250.f });
         }
         else
         {
-            // 니코 방에서 온 경우
+            // 안에서 온 경우
             player->SetPosition({ 308.f, 180.f });
         }
         positionSet = true;
 
- 
-       
+
+
     }
 
-    if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
-    {
-        SCENE_MGR.ChangeScene(SceneIds::Room);  // 예시: 방으로 돌아가기
-    }
+    //if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
+    //{
+    //    SCENE_MGR.ChangeScene(SceneIds::Room);  // 예시: 방으로 돌아가기
+    //}
     Scene::Update(dt);
-}
 
-void LivingRoom::Draw(sf::RenderWindow& window)
+}
+void building::Draw(sf::RenderWindow& window)
 {
     Scene::Draw(window); // Scene이 알아서 worldView, uiView, gameObjects draw
 
@@ -161,23 +140,23 @@ void LivingRoom::Draw(sf::RenderWindow& window)
         messageText->Draw(window);
     }
 }
-    
-
-void LivingRoom::Release()
+void building::Release()
 {
-  
-}
 
-void LivingRoom::ShowMessage(const std::string& msg)
+}
+void building::ShowMessage(const std::string& msg)
 {
     if (messageText)
     {
         messageText->SetString(msg);
     }
+
 }
-void LivingRoom::Exit()
+void building::Exit()
 {
     bgm.stop(); // 음악 정지
     positionSet = false;
     Scene::Exit(); // 부모 클래스 Exit 호출 (리소스 언로드 등)
+
+
 }

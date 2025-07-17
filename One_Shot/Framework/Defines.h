@@ -28,8 +28,9 @@ enum class SceneIds
 	LivingRoom,
 	cellar,
 	cellar2,
-	Setting,
+	building,
 	Stage1,
+	Setting,
 	Count
 };
 
