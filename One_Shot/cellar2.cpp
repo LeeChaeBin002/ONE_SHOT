@@ -82,6 +82,16 @@ void cellar2::Enter()
     MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
 
     positionSet = false;
+    if (GameState::playerState == PlayerState::HoldingBulb)
+    {
+        std::string brightBgPath = "graphics/Tilesets/cellar2.png";
+        if (!TEXTURE_MGR.Load(brightBgPath))
+        {
+            std::cerr << "지하실2 NEW 배경 텍스처 로드 실패" << std::endl;
+        }
+        cellar2Bg->GetSprite().setTexture(TEXTURE_MGR.Get(brightBgPath));
+        std::cout << "전구 들고 있음 → 지하실 밝은 배경 적용" << std::endl;
+    }
 
 }
 void cellar2::Update(float dt)
@@ -278,7 +288,7 @@ void cellar2::ChangePlayerState()
 {
     if (cellar2Bg != nullptr)
     {
-        cellar2Bg->SetTexture("graphics/Tilesets/changed_map.png");
+        cellar2Bg->SetTexture("graphics/Tilesets/cellar2.png");
     }
     if (!TEXTURE_MGR.Load("graphics/Characters/niko_bulb.png"))
     {

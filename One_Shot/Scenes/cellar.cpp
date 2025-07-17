@@ -89,11 +89,8 @@ void cellar::Enter()
         {
             std::cerr << "밝은 계단 배경 텍스처 로드 실패" << std::endl;
         }
-        else
-        {
-            cellarBg->GetSprite().setTexture(TEXTURE_MGR.Get(brightBgPath));
-            std::cout << "전구 들고 있음 → 지하실 밝은 배경 적용" << std::endl;
-        }
+        cellarBg->GetSprite().setTexture(TEXTURE_MGR.Get(brightBgPath));
+        std::cout << "전구 들고 있음 → 지하실 밝은 배경 적용" << std::endl;
     }
     
 }
