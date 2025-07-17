@@ -36,6 +36,6 @@
 #include "Mode.h"
 #include "Title.h"
 #include "Room.h"
-#include "setting.h"
+
 #include "Stage1.h"
 

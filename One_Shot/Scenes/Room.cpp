@@ -199,7 +199,12 @@ void Room::Update(float dt)
 
 		return; // instruction 보는 중엔 다른 Update 로직 실행 XX
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::A))
+	{
 
+		SCENE_MGR.ChangeScene(SceneIds::Storege);
+
+	}
 	// 기존 플레이어 이동, 체크 등등...
 	Scene::Update(dt);
 	if (!player) return;

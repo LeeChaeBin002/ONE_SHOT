@@ -145,8 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="building.cpp" />
-    <ClCompile Include="cellar2.cpp" />
+    <ClCompile Include="Scenes\building.cpp" />
+    <ClCompile Include="Scenes\cellar2.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Scenes\cellar.cpp" />
@@ -167,7 +167,7 @@
     <ClCompile Include="Scenes\Mode.cpp" />
     <ClCompile Include="Framework\SceneMgr.cpp" />
     <ClCompile Include="Framework\SoundMgr.cpp" />
-    <ClCompile Include="Scenes\Setting.cpp" />
+    <ClCompile Include="Framework\Storage.cpp" />
     <ClCompile Include="Scenes\Stage1.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -178,8 +178,8 @@
     <ClCompile Include="Scenes\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="building.h" />
-    <ClInclude Include="cellar2.h" />
+    <ClInclude Include="Scenes\building.h" />
+    <ClInclude Include="Scenes\cellar2.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\cellar.h" />
@@ -203,7 +203,7 @@
     <ClInclude Include="Scenes\Mode.h" />
     <ClInclude Include="Framework\SceneMgr.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
-    <ClInclude Include="Scenes\Setting.h" />
+    <ClInclude Include="Framework\Storage.h" />
     <ClInclude Include="Scenes\Stage1.h" />
     <CopyFileToFolders Include="stdafx.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>

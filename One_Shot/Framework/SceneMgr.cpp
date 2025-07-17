@@ -7,6 +7,7 @@
 #include "cellar.h"
 #include "cellar2.h"
 #include "building.h"
+#include "Storage.h"
 
 
 
@@ -26,7 +27,7 @@ void SceneMgr::Init()
 	scenes.push_back(new cellar2());
 	scenes.push_back(new building());
 	scenes.push_back(new Stage1());
-	scenes.push_back(new Setting());
+	scenes.push_back(new Storage());
 
 
 	for (auto scene : scenes)
