@@ -17,9 +17,6 @@ protected:
     bool ShowedWindowMsg = false;
   
     TextGo* messageText = nullptr;
-    TextGo* screen;
-    TextGo* clickStart;
-    SceneIds changeScene = SceneIds::Setting;
     bool canAccessLivingRoom = false;
     
 

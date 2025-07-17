@@ -13,6 +13,9 @@
 // SFML
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 // FRAMEWORK
 #include "Defines.h"

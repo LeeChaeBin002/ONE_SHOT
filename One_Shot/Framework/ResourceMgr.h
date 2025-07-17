@@ -2,6 +2,7 @@
 #include "Singleton.h"
 
 template <typename T>
+
 class ResourceMgr : public Singleton<ResourceMgr<T>>
 {
 	friend Singleton<ResourceMgr<T>>;
@@ -101,8 +102,7 @@ public:
 		auto it = resources.find(id);
 		if (it == resources.end())
 		{
-			std::cerr << "Resource not found: " << id << std::endl;
-			return Empty;
+			throw std::runtime_error("Resource not found: " + id);
 		}
 		return *(it->second);
 	}

@@ -96,12 +96,7 @@ void cellar2::Enter()
 }
 void cellar2::Update(float dt)
 {
-    
    
-    if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace))
-    {
-        SCENE_MGR.ChangeScene(SceneIds::cellar);  // ESC 누르면 지하실1로 돌아감
-    }
     if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
     {
         return;

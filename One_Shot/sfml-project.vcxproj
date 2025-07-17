@@ -148,6 +148,7 @@
     <ClCompile Include="building.cpp" />
     <ClCompile Include="cellar2.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Scenes\cellar.cpp" />
     <ClCompile Include="Scenes\Computer.cpp" />
     <ClCompile Include="Framework\AniPlayer.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="building.h" />
     <ClInclude Include="cellar2.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\cellar.h" />
     <ClInclude Include="Scenes\Computer.h" />
     <ClInclude Include="Framework\AniPlayer.h" />
@@ -210,7 +212,9 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="Framework\Variables.h" />
     <ClInclude Include="Scenes\Title.h" />
-    <ClInclude Include="Scenes\TitleScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sfml-project.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
