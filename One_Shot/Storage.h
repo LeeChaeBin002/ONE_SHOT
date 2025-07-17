@@ -6,7 +6,8 @@ class Storage :
 {
 protected:
     sf::Sprite inventorybg;
-
+    std::vector<SpriteGo*> slots;
+    int selectedIndex = 0;
 
 public:
 

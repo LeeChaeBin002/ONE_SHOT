@@ -21,7 +21,7 @@ protected:
 
 public:
 	Scene(SceneIds id);
-	//const SceneIds Id;
+	
 	virtual ~Scene() = default;
 	SceneIds GetId() const { return id; }
 	const sf::View& GetWorldView() const { return worldView; }

@@ -15,11 +15,12 @@ protected:
 
     AniPlayer* player = nullptr;
     sf::Sound bgm;
-	Storage* storage;
     sf::Sprite background;
     bool positionSet = false;
     bool hasRemote = false;
     bool ShowedWindowMsg = false;
+	Storage* storage=nullptr;
+    bool trigger = false;
   
     TextGo* messageText = nullptr;
     bool canAccessLivingRoom = false;

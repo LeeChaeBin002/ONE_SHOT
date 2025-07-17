@@ -14,6 +14,10 @@ Room::Room() : Scene(SceneIds::Room)
 
 void Room::Init()
 {
+	texIds.push_back("graphics/Pictures/Menus/empty_slot1.png");
+	texIds.push_back("graphics/Pictures/Menus/empty_slot2.png");
+	texIds.push_back("graphics/Pictures/Menus/empty_slot3.png");
+	texIds.push_back("graphics/Pictures/Menus/empty_slot4.png");
 	texIds.push_back("graphics/Menus/Storage.png");
 	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
 	texIds.push_back("graphics/Pictures/ko/instruction1.png");
@@ -43,6 +47,8 @@ void Room::Init()
 		AddGameObject(instruction);
 		instructions.push_back(instruction);
 	}
+	// 아이템 슬롯 로드
+	
 
 	texIds.push_back("graphics/Tilesets/niko_room.png");
 	texIds.push_back("graphics/Icons/item_start_remote.png");
@@ -88,6 +94,8 @@ void Room::Enter()
 {
 	// 기존 코드
 	Scene::Enter();
+	
+
 	sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
 	uiView.setSize(windowSize);
 	uiView.setCenter(windowSize * 0.5f);
@@ -151,6 +159,18 @@ void Room::Enter()
 }
 void Room::Update(float dt)
 {
+	if (InputMgr::GetKeyDown(sf::Keyboard::A))
+	{
+		trigger = !trigger;
+		if (storage)
+			storage->SetActive(trigger);
+	}
+	if (storage && storage->GetActive())
+	{
+		storage->Update(dt);
+	}
+	Scene::Update(dt);
+
 	//messageText->SetString("창문 밖에 뭔가 보인다");
 	if (isShowingInstruction)
 	{
@@ -299,7 +319,11 @@ void Room::Draw(sf::RenderWindow& window)
 }
 void Room::Release()
 {
-	
+	if (storage != nullptr)
+	{
+		delete storage;
+		storage = nullptr;
+	}
 }
 
 void Room::screenchange(const std::string& msg)
