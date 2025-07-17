@@ -4,7 +4,7 @@
 #include "TextGo.h"
 #include "SpriteGo.h"
 
-
+class Storage;
 class Room :
     public Scene
 {
@@ -15,7 +15,7 @@ protected:
 
     AniPlayer* player = nullptr;
     sf::Sound bgm;
-    
+	Storage* storage;
     sf::Sprite background;
     bool positionSet = false;
     bool hasRemote = false;

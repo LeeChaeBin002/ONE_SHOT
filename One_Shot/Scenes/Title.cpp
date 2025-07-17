@@ -9,7 +9,8 @@ Title::Title() :Scene(SceneIds::Title)
 
 void Title::Init()
 {
-	
+	menuOptions = { "Start", "Setting", "Exit" };
+	selectedIndex = 0;
 	texIds.push_back("graphics/Titles/normal.png");
 	fontIds.push_back("fonts/TerminusTTF-Bold.ttf");
 

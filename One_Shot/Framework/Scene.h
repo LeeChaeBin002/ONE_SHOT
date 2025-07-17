@@ -27,7 +27,7 @@ public:
 	const sf::View& GetWorldView() const { return worldView; }
 	virtual void Init();
 	virtual void Release();
-
+	
 	virtual void Enter();
 	virtual void Exit();
 

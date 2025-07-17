@@ -3,17 +3,19 @@
 #include "AniPlayer.h"
 #include "SpriteGo.h"
 #include "SoundMgr.h"
+#include "Storage.h"
 #pragma execution_character_set("utf-8")
 
 
-Room::Room() :Scene(SceneIds::Room)
+Room::Room() : Scene(SceneIds::Room)
 {
 
 }
 
 void Room::Init()
 {
-
+	texIds.push_back("graphics/Menus/Storage.png");
+	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
 	texIds.push_back("graphics/Pictures/ko/instruction1.png");
 	texIds.push_back("graphics/Pictures/ko/instruction2.png");
 	texIds.push_back("graphics/Pictures/ko/instruction3.png");
@@ -86,7 +88,9 @@ void Room::Enter()
 {
 	// 기존 코드
 	Scene::Enter();
-
+	sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
+	uiView.setSize(windowSize);
+	uiView.setCenter(windowSize * 0.5f);
 	if (SCENE_MGR.GetPreviousScene() == SceneIds::Title)
 	{
 		isShowingInstruction = true;
@@ -199,12 +203,12 @@ void Room::Update(float dt)
 
 		return; // instruction 보는 중엔 다른 Update 로직 실행 XX
 	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::A))
+	/*if (InputMgr::GetKeyDown(sf::Keyboard::A))
 	{
 
 		SCENE_MGR.ChangeScene(SceneIds::Storege);
 
-	}
+	}*/
 	// 기존 플레이어 이동, 체크 등등...
 	Scene::Update(dt);
 	if (!player) return;

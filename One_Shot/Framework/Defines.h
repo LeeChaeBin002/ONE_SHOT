@@ -30,7 +30,6 @@ enum class SceneIds
 	cellar2,
 	building,
 	Stage1,
-	Storege,
 	Count
 };
 

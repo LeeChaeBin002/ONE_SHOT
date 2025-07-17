@@ -100,10 +100,10 @@ public:
 	T& Get(const std::string& id) 
 	{
 		auto it = resources.find(id);
-		if (it == resources.end())
+		/*if (it == resources.end())
 		{
 			throw std::runtime_error("Resource not found: " + id);
-		}
+		}*/
 		return *(it->second);
 	}
 	

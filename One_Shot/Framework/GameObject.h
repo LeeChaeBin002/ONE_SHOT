@@ -3,6 +3,7 @@
 class GameObject
 {
 protected:
+
 	std::string name;
 	bool active = true;
 
