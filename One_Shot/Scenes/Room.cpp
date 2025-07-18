@@ -17,6 +17,36 @@ void Room::Init()
 	
 	texIds.push_back("graphics/Menus/Storage.png");
 	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
+	storage->onItemSelected = [this](int index)
+		{
+			// 오른쪽 아래에 아이콘 생성
+			std::string iconPath = "graphics/Icons/item_start_remote.png";
+			if (!TEXTURE_MGR.Exists(iconPath))
+			{
+				if (!TEXTURE_MGR.Load(iconPath))
+				{
+					std::cerr << "Failed to load icon texture: " << iconPath << std::endl;
+					return;
+				}
+			}
+			// 기존 아이콘 있으면 삭제
+			if (selectedIcon != nullptr)
+			{
+				selectedIcon->SetActive(false);
+				gameObjects.remove(selectedIcon); 
+				delete selectedIcon;
+				selectedIcon = nullptr;
+			}
+			SpriteGo* icon = new SpriteGo(iconPath);
+			sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
+			icon->SetPosition({ windowSize.x - 50.f, windowSize.y - 50.f }); // 오른쪽 아래
+			icon->SetScale({ 1.5f, 1.5f });
+			icon->SetOrigin(Origins::MC);
+			AddGameObject(icon);
+			selectedIcon = icon;
+		};
+	
+	
 	texIds.push_back("graphics/Pictures/ko/instruction1.png");
 	texIds.push_back("graphics/Pictures/ko/instruction2.png");
 	texIds.push_back("graphics/Pictures/ko/instruction3.png");
@@ -71,6 +101,7 @@ void Room::Init()
 	AddGameObject(player);
 	Scene::Init();
 	storage->SetActive(false);
+	storage->Reset();
 }
 void Room::Enter()
 {
@@ -140,7 +171,7 @@ void Room::Enter()
 	player->ApplyStateTexture(); 
 }
 void Room::Update(float dt)
-{//messageText->SetString("창문 밖에 뭔가 보인다");
+{
 	if (isShowingInstruction)
 	{
 		if (InputMgr::GetKeyDown(sf::Keyboard::Space))
@@ -157,9 +188,6 @@ void Room::Update(float dt)
 				break;
 			case 2:
 				soundPath = "Audio/ME/instruction3.wav";
-				break;
-			case 3:
-				soundPath = "";
 				break;
 			default:
 				soundPath = "";
@@ -193,7 +221,7 @@ void Room::Update(float dt)
 		return; // instruction 보는 중엔 다른 Update 로직 실행 XX
 	}
 	
-	if (InputMgr::GetKeyDown(sf::Keyboard::A))
+	if (InputMgr::GetKeyDown(sf::Keyboard::S))
 	{
 		trigger = !trigger;
 		if (storage)
@@ -208,14 +236,7 @@ void Room::Update(float dt)
 	Scene::Update(dt);
 	if (!player) return;
 
-	
-	/*if (InputMgr::GetKeyDown(sf::Keyboard::A))
-	{
 
-		SCENE_MGR.ChangeScene(SceneIds::Storege);
-
-	}*/
-	// 기존 플레이어 이동, 체크 등등...
 	Scene::Update(dt);
 	if (!player) return;
 
@@ -339,15 +360,14 @@ void Room::CheckItempickup()
 				hasRemote = true;
 				std::cout << "item1 get!" << std::endl;
 
-				if (storage)
+				if (storage != nullptr)
 				{
 					storage->AddItem("graphics/Icons/item_start_remote.png");
-				
-				}
+					
+				};
 			}
 		}
 	}
-
 }
 
 void Room::ShowMessage(const std::string& msg)
@@ -360,4 +380,15 @@ void Room::ShowMessage(const std::string& msg)
 void Room::Exit()
 {
 	
+}
+
+void Room::RemoveSelectedIcon()
+{
+	if (selectedIcon)
+	{
+		selectedIcon->SetActive(false);
+		gameObjects.remove(selectedIcon);
+		delete selectedIcon;
+		selectedIcon = nullptr;
+	}
 }

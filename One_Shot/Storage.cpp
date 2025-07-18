@@ -1,24 +1,20 @@
 #include "stdafx.h"
 #include "Storage.h"
 
+
 Storage::Storage(const std::string name) :GameObject(name)
 {
 
 }
-
+Storage& Storage::Instance()
+{
+	static Storage instance("Storage");
+	return instance;
+}
 void Storage::Init()//씬당 한번씩
 {
 	sortingLayer = SortingLayers::UI;
 	sortingOrder = 0;
-}
-
-void Storage::Release()
-{
-}
-
-void Storage::Reset()//초기화..
-{
-
 	texId = "graphics/Menus/Storage.png";
 	if (!TEXTURE_MGR.Exists(texId))
 	{
@@ -27,13 +23,15 @@ void Storage::Reset()//초기화..
 	inventorybg.setTexture(TEXTURE_MGR.Get(texId));
 	SetPosition({ 0.5f,0.0f });
 	SetOrigin(Origins::TL);
-	slots.clear();
-	const float storageWidth = 200.f;  // Storage.png 가로 크기
-	const float storageHeight = 300.f; // Storage.png 세로 크기
+
 	const float startX = 45.f;
 	const float startY = 120.f;
-	const float offsetX = 280.f; // 두 슬롯 간 가로 거리
-	const float offsetY = 30.f; // 두 슬롯 간 세로 거리
+	const float offsetX = 280.f;
+	const float offsetY = 30.f;
+
+	slots.clear();
+	slotHasOverlay.clear();
+	slotHasItem.clear();
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -45,18 +43,28 @@ void Storage::Reset()//초기화..
 		}
 		SpriteGo* slot = new SpriteGo(texPath);
 		slot->SetOrigin(Origins::MC);
-		int row = i / 2;//0,0,1,1
-		int col = i % 2;//0,1,0,1
+		int row = i / 2;
+		int col = i % 2;
 		sf::Vector2f slotPos = { startX + col * offsetX, startY + row * offsetY };
 		slot->SetPosition(slotPos);
 		slot->GetSprite().setTexture(TEXTURE_MGR.Get(texPath));
 		slot->SetScale({ 1.0f, 1.0f });
-		//slot->GetSprite().setColor(sf::Color::White);
-		std::cout << "SlotPos (" << slotPos.x << ", " << slotPos.y << ")" << std::endl;
-
+		slotHasOverlay.push_back(false);
+		slotHasItem.push_back(false);
 		slots.push_back(slot);
 	}
+
+}
+
+void Storage::Release()
+{
+}
+
+void Storage::Reset()//초기화..
+{
+	currentSlotIndex = 0;
 	selectedIndex = 0;
+	highlightTime = 0.f;
 }
 
 void Storage::Update(float dt)
@@ -86,7 +94,23 @@ void Storage::Update(float dt)
 	else if (InputMgr::GetKeyDown(sf::Keyboard::Z))
 	{
 		std::cout << "Selected Slot: " << selectedIndex << std::endl;
-		
+
+		// 기존 선택 슬롯 자주색 해제 + 원래 슬롯 이미지 복구
+		if (selectedSlotIndex >= 0 && selectedSlotIndex < slotHasOverlay.size())
+		{
+			slotHasOverlay[selectedSlotIndex] = false;
+		}
+		// 새로 선택한 슬롯 업데이트
+		selectedSlotIndex = selectedIndex;
+		if (selectedSlotIndex >= 0 && selectedSlotIndex < slotHasOverlay.size())
+		{
+			slotHasOverlay[selectedSlotIndex] = true;
+		}
+
+		if (onItemSelected)
+		{
+			onItemSelected(selectedIndex);
+		}
 	}
 }
 
@@ -99,28 +123,29 @@ void Storage::Draw(sf::RenderWindow& window)
 		SpriteGo* slot = slots[i];
 		if (slot == nullptr) continue;
 
-		window.draw(slot->GetSprite());
-		sf::Color color = slot->GetSprite().getColor();
-		if (i == selectedIndex)
+
+		if (slotHasOverlay[i]&& slot->GetSprite().getTexture() != nullptr)
 		{
 			sf::RectangleShape overlay(slot->GetSprite().getGlobalBounds().getSize());
 			overlay.setPosition(slot->GetPosition());
 			overlay.setOrigin(slot->GetSprite().getOrigin());
-
-			float alpha = (std::sin(highlightTime) * 0.5f + 0.5f) * 200.f; // 최대 200의 알파
-			overlay.setFillColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha)));
+			overlay.setFillColor(sf::Color(60, 0, 40, 180));  // 진한 자주색
 			window.draw(overlay);
 		}
-		else
+
+		if (i == selectedIndex)
 		{
-			color.a = 255;
+			sf::RectangleShape border(slot->GetSprite().getGlobalBounds().getSize());
+			border.setPosition(slot->GetPosition());
+			border.setOrigin(slot->GetSprite().getOrigin());
+			border.setFillColor(sf::Color::Transparent);
+			border.setOutlineThickness(3.f);
+			border.setOutlineColor(sf::Color::Yellow);
+			window.draw(border);
 		}
-		slot->GetSprite().setColor(color);
-		//std::cout << "Slot Count: " << slots.size() << std::endl; // 여기!
+		window.draw(slot->GetSprite());
+
 	}
-		
-
-
 }
 
 void Storage::SetPosition(const sf::Vector2f& pos)
@@ -173,6 +198,8 @@ void Storage::AddItem(const std::string& texPath)
 		return;
 	}
 	slots[currentSlotIndex]->GetSprite().setTexture(TEXTURE_MGR.Get(texPath));
+	slotHasItem[currentSlotIndex] = true;
 	std::cout << "Added item to slot " << currentSlotIndex << std::endl;
 	currentSlotIndex++;
+	
 }

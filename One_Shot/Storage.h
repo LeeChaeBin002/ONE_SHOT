@@ -6,16 +6,21 @@ class Storage :
 {
 protected:
     sf::Sprite inventorybg;
-    int selectedIndex = 0;
+    int selectedIndex = -1;//0부터시작이여서 전숫자픽스
     int currentSlotIndex = 0;
+    int selectedSlotIndex = 0;
     float highlightTime = 0.f;
     float highlightSpeed = 3.f;
-
+  
 public:
-
+    std::vector<bool> slotHasItem;
+    std::vector<bool> slotHasOverlay;
+    std::function<void(int)> onItemSelected;
     std::vector<SpriteGo*> slots;
     std::string texId;
-    Storage(const std::string name = "");
+    static Storage& Instance();
+
+    Storage(const std::string name = "Storage");
     ~Storage() override = default;
     void Init() override;
 

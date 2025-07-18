@@ -28,9 +28,10 @@ protected:
 
 public:
     std::vector<SpriteGo*>slots;
+    SpriteGo* selectedIcon = nullptr;
+
     Room();
     ~Room() override = default;
-
     void SetAccessLivingRoom(bool access) { canAccessLivingRoom = access; }
     bool CanAccessLivingRoom() const { return canAccessLivingRoom; }
     void CheckItempickup();
@@ -42,6 +43,7 @@ public:
     void Release() override;
     void screenchange(const std::string& msg);
     void Exit()override;
+    void RemoveSelectedIcon();
 
 };
 

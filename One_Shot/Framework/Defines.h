@@ -4,9 +4,10 @@
 
 enum class SortingLayers
 {
-	Background,
-	Foreground,
 	Default,
+	Background,
+	Midground,
+	Foreground,
 	UI
 };
 

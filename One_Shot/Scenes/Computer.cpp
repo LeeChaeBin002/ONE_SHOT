@@ -33,7 +33,7 @@ void Computer::Init()
     if (texture != nullptr)
     {
         sf::Vector2u textureSize = texture->getSize();     // 이미지 원본 크기
-        //sf::Vector2u windowSize = FRAMEWORK.GetWindow().getSize(); // 창 크기
+        
         std::cout << "Original Texture Size: " << textureSize.x << ", " << textureSize.y << std::endl;
         // 640x480 크기로 스케일링
         float scaleX = 640.0f / textureSize.x;

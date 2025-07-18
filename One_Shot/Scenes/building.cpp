@@ -50,8 +50,6 @@ void building::Init()
     player->SetSpeed(150.f);
     player->Reset();
     AddGameObject(player);
-
-
     Scene::Init();
 
 }
