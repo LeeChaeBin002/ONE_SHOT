@@ -27,6 +27,7 @@ protected:
     sf::Sound instructionEffect;
 
 public:
+    std::vector<SpriteGo*>slots;
     Room();
     ~Room() override = default;
 

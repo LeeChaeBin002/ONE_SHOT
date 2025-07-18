@@ -14,10 +14,7 @@ Room::Room() : Scene(SceneIds::Room)
 
 void Room::Init()
 {
-	texIds.push_back("graphics/Menus/empty_slot1.png");
-	texIds.push_back("graphics/Menus/empty_slot2.png");
-	texIds.push_back("graphics/Menus/empty_slot3.png");
-	texIds.push_back("graphics/Menus/empty_slot4.png");
+	
 	texIds.push_back("graphics/Menus/Storage.png");
 	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
 	texIds.push_back("graphics/Pictures/ko/instruction1.png");
@@ -64,21 +61,6 @@ void Room::Init()
 	remote->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
 	AddGameObject(remote);
 
-	//TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-	//go->SetString("Room");
-	//go->SetCharacterSize(30);
-	//go->SetFillColor(sf::Color::White);
-	//go->sortingLayer = SortingLayers::UI;
-	//go->sortingOrder = 0;
-	//AddGameObject(go);
-
-	//messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
-	//messageText->SetCharacterSize(24);
-	//messageText->SetFillColor(sf::Color::White);
-	//messageText->SetPosition({ 50.f, 50.f }); // 적당한 화면 좌표
-	//messageText->sortingLayer = SortingLayers::UI;
-	//messageText->sortingOrder = 1;
-	//AddGameObject(messageText);
 
 	player = new AniPlayer("player");
 	player->SetPosition({ 0.f,0.f });
@@ -274,6 +256,7 @@ void Room::Update(float dt)
 		{
 			ShowMessage("hint:2817");
 		}
+		
 	}
 
 	if (canAccessLivingRoom && InputMgr::GetKeyDown(sf::Keyboard::Z))
@@ -355,6 +338,12 @@ void Room::CheckItempickup()
 				obj->SetActive(false); // 아이템 비활성화
 				hasRemote = true;
 				std::cout << "item1 get!" << std::endl;
+
+				if (storage)
+				{
+					storage->AddItem("graphics/Icons/item_start_remote.png");
+				
+				}
 			}
 		}
 	}

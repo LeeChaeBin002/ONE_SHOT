@@ -10,7 +10,6 @@ void Storage::Init()//씬당 한번씩
 {
 	sortingLayer = SortingLayers::UI;
 	sortingOrder = 0;
-
 }
 
 void Storage::Release()
@@ -86,8 +85,8 @@ void Storage::Update(float dt)
 	}
 	else if (InputMgr::GetKeyDown(sf::Keyboard::Z))
 	{
-		//std::cout << "Selected Slot: " << selectedIndex << std::endl;
-		// 슬롯 선택 로직
+		std::cout << "Selected Slot: " << selectedIndex << std::endl;
+		
 	}
 }
 
@@ -100,7 +99,8 @@ void Storage::Draw(sf::RenderWindow& window)
 		SpriteGo* slot = slots[i];
 		if (slot == nullptr) continue;
 
-		//sf::Color color = sf::Color::White;
+		window.draw(slot->GetSprite());
+		sf::Color color = slot->GetSprite().getColor();
 		if (i == selectedIndex)
 		{
 			sf::RectangleShape overlay(slot->GetSprite().getGlobalBounds().getSize());
@@ -109,13 +109,16 @@ void Storage::Draw(sf::RenderWindow& window)
 
 			float alpha = (std::sin(highlightTime) * 0.5f + 0.5f) * 200.f; // 최대 200의 알파
 			overlay.setFillColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha)));
-
 			window.draw(overlay);
 		}
-
-
+		else
+		{
+			color.a = 255;
+		}
+		slot->GetSprite().setColor(color);
 		//std::cout << "Slot Count: " << slots.size() << std::endl; // 여기!
 	}
+		
 
 
 }
@@ -152,4 +155,24 @@ void Storage::SetOrigin(Origins preset)
 		Utils::SetOrigin(inventorybg, preset);
 	}
 
+}
+
+void Storage::AddItem(const std::string& texPath)
+{
+	if (!TEXTURE_MGR.Exists(texPath))
+	{
+		if (!TEXTURE_MGR.Load(texPath))
+		{
+			std::cerr << "Failed to load texture: " << texPath << std::endl;
+			return;
+		}
+	}
+	if (currentSlotIndex >= slots.size())
+	{
+		std::cout << "No empty slot available" << std::endl;
+		return;
+	}
+	slots[currentSlotIndex]->GetSprite().setTexture(TEXTURE_MGR.Get(texPath));
+	std::cout << "Added item to slot " << currentSlotIndex << std::endl;
+	currentSlotIndex++;
 }

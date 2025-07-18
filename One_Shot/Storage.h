@@ -6,13 +6,14 @@ class Storage :
 {
 protected:
     sf::Sprite inventorybg;
-    std::vector<SpriteGo*> slots;
     int selectedIndex = 0;
+    int currentSlotIndex = 0;
     float highlightTime = 0.f;
     float highlightSpeed = 3.f;
 
 public:
 
+    std::vector<SpriteGo*> slots;
     std::string texId;
     Storage(const std::string name = "");
     ~Storage() override = default;
@@ -31,6 +32,6 @@ public:
     void SetScale(const sf::Vector2f& s) override;
     void SetOrigin(const sf::Vector2f& o) override;
     void SetOrigin(Origins preset) override;
-
+    void AddItem(const std::string& texPath);
 };
 
