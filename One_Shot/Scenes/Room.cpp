@@ -14,10 +14,10 @@ Room::Room() : Scene(SceneIds::Room)
 
 void Room::Init()
 {
-	texIds.push_back("graphics/Pictures/Menus/empty_slot1.png");
-	texIds.push_back("graphics/Pictures/Menus/empty_slot2.png");
-	texIds.push_back("graphics/Pictures/Menus/empty_slot3.png");
-	texIds.push_back("graphics/Pictures/Menus/empty_slot4.png");
+	texIds.push_back("graphics/Menus/empty_slot1.png");
+	texIds.push_back("graphics/Menus/empty_slot2.png");
+	texIds.push_back("graphics/Menus/empty_slot3.png");
+	texIds.push_back("graphics/Menus/empty_slot4.png");
 	texIds.push_back("graphics/Menus/Storage.png");
 	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
 	texIds.push_back("graphics/Pictures/ko/instruction1.png");
@@ -64,21 +64,21 @@ void Room::Init()
 	remote->SetPosition({ 0.f, 0.f }); // �ʿ��� ��ġ�� ����
 	AddGameObject(remote);
 
-	TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-	go->SetString("Room");
-	go->SetCharacterSize(30);
-	go->SetFillColor(sf::Color::White);
-	go->sortingLayer = SortingLayers::UI;
-	go->sortingOrder = 0;
-	AddGameObject(go);
+	//TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
+	//go->SetString("Room");
+	//go->SetCharacterSize(30);
+	//go->SetFillColor(sf::Color::White);
+	//go->sortingLayer = SortingLayers::UI;
+	//go->sortingOrder = 0;
+	//AddGameObject(go);
 
-	messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
-	messageText->SetCharacterSize(24);
-	messageText->SetFillColor(sf::Color::White);
-	messageText->SetPosition({ 50.f, 50.f }); // 적당한 화면 좌표
-	messageText->sortingLayer = SortingLayers::UI;
-	messageText->sortingOrder = 1;
-	AddGameObject(messageText);
+	//messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
+	//messageText->SetCharacterSize(24);
+	//messageText->SetFillColor(sf::Color::White);
+	//messageText->SetPosition({ 50.f, 50.f }); // 적당한 화면 좌표
+	//messageText->sortingLayer = SortingLayers::UI;
+	//messageText->sortingOrder = 1;
+	//AddGameObject(messageText);
 
 	player = new AniPlayer("player");
 	player->SetPosition({ 0.f,0.f });
@@ -88,7 +88,7 @@ void Room::Init()
 	player->ApplyStateTexture();
 	AddGameObject(player);
 	Scene::Init();
-	
+	storage->SetActive(false);
 }
 void Room::Enter()
 {
@@ -158,20 +158,7 @@ void Room::Enter()
 	player->ApplyStateTexture(); 
 }
 void Room::Update(float dt)
-{
-	if (InputMgr::GetKeyDown(sf::Keyboard::A))
-	{
-		trigger = !trigger;
-		if (storage)
-			storage->SetActive(trigger);
-	}
-	if (storage && storage->GetActive())
-	{
-		storage->Update(dt);
-	}
-	Scene::Update(dt);
-
-	//messageText->SetString("창문 밖에 뭔가 보인다");
+{//messageText->SetString("창문 밖에 뭔가 보인다");
 	if (isShowingInstruction)
 	{
 		if (InputMgr::GetKeyDown(sf::Keyboard::Space))
@@ -223,6 +210,23 @@ void Room::Update(float dt)
 
 		return; // instruction 보는 중엔 다른 Update 로직 실행 XX
 	}
+	
+	if (InputMgr::GetKeyDown(sf::Keyboard::A))
+	{
+		trigger = !trigger;
+		if (storage)
+			storage->SetActive(trigger);
+		std::cout << "Storage Active: " << trigger << std::endl;
+	}
+	if (storage && storage->GetActive())
+	{
+		storage->Update(dt);
+		return;
+	}
+	Scene::Update(dt);
+	if (!player) return;
+
+	
 	/*if (InputMgr::GetKeyDown(sf::Keyboard::A))
 	{
 
@@ -303,6 +307,10 @@ void Room::Draw(sf::RenderWindow& window)
 	window.setView(uiView);
 
 	Scene::Draw(window);
+	if (storage && storage->GetActive())
+	{
+		storage->Draw(window);
+	}
 
 	if (messageText != nullptr && messageText->GetActive())
 	{

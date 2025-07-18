@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Storage.h"
 
-Storage::Storage(const std::string name):GameObject(name)
+Storage::Storage(const std::string name) :GameObject(name)
 {
-	
+
 }
 
 void Storage::Init()//씬당 한번씩
@@ -19,29 +19,41 @@ void Storage::Release()
 
 void Storage::Reset()//초기화..
 {
-	
-	texId= "graphics/Menus/Storage.png";
+
+	texId = "graphics/Menus/Storage.png";
+	if (!TEXTURE_MGR.Exists(texId))
+	{
+		TEXTURE_MGR.Load(texId);
+	}
 	inventorybg.setTexture(TEXTURE_MGR.Get(texId));
-	SetPosition({ 0.f,0.f });
+	SetPosition({ 0.5f,0.0f });
 	SetOrigin(Origins::TL);
 	slots.clear();
+	const float storageWidth = 200.f;  // Storage.png 가로 크기
+	const float storageHeight = 300.f; // Storage.png 세로 크기
+	const float startX = 45.f;
+	const float startY = 120.f;
+	const float offsetX = 280.f; // 두 슬롯 간 가로 거리
+	const float offsetY = 30.f; // 두 슬롯 간 세로 거리
 
-	const float startX = FRAMEWORK.GetWindowSizeF().x * 0.4f;
-	const float startY = FRAMEWORK.GetWindowSizeF().y * 0.4f;
-	const float offsetX = 100.f;  // 가로 간격
-	const float offsetY = 100.f;  // 세로 간격
-
-	for (int i = 1; i <= 4; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
-		std::string texPath = "graphics/Pictures/Menus/empty_slot" + std::to_string(i+1) + ".png";
-		TEXTURE_MGR.Load(texPath);
+		std::string texPath = "graphics/Menus/empty_slot" + std::to_string(i + 1) + ".png";
+
+		if (!TEXTURE_MGR.Load(texPath))
+		{
+			std::cerr << "Failed to load slot texture: " << texPath << std::endl;
+		}
 		SpriteGo* slot = new SpriteGo(texPath);
 		slot->SetOrigin(Origins::MC);
-		int row = i / 2;
-		int col = i % 2;
+		int row = i / 2;//0,0,1,1
+		int col = i % 2;//0,1,0,1
 		sf::Vector2f slotPos = { startX + col * offsetX, startY + row * offsetY };
 		slot->SetPosition(slotPos);
-		slot->SetScale({ 1.f, 1.f });
+		slot->GetSprite().setTexture(TEXTURE_MGR.Get(texPath));
+		slot->SetScale({ 1.0f, 1.0f });
+		//slot->GetSprite().setColor(sf::Color::White);
+		std::cout << "SlotPos (" << slotPos.x << ", " << slotPos.y << ")" << std::endl;
 
 		slots.push_back(slot);
 	}
@@ -50,6 +62,8 @@ void Storage::Reset()//초기화..
 
 void Storage::Update(float dt)
 {
+
+	highlightTime += dt * highlightSpeed;
 	if (InputMgr::GetKeyDown(sf::Keyboard::Left))
 	{
 		if (selectedIndex % 2 > 0)
@@ -72,7 +86,7 @@ void Storage::Update(float dt)
 	}
 	else if (InputMgr::GetKeyDown(sf::Keyboard::Z))
 	{
-		std::cout << "Selected Slot: " << selectedIndex << std::endl;
+		//std::cout << "Selected Slot: " << selectedIndex << std::endl;
 		// 슬롯 선택 로직
 	}
 }
@@ -86,18 +100,24 @@ void Storage::Draw(sf::RenderWindow& window)
 		SpriteGo* slot = slots[i];
 		if (slot == nullptr) continue;
 
-		window.draw(slot->GetSprite());
+		//sf::Color color = sf::Color::White;
 		if (i == selectedIndex)
 		{
-			sf::RectangleShape highlight(slot->GetSprite().getGlobalBounds().getSize());
-			highlight.setPosition(slot->GetPosition());
-			highlight.setFillColor(sf::Color::Transparent);
-			highlight.setOutlineColor(sf::Color::White);
-			highlight.setOutlineThickness(2.f);
-			window.draw(highlight);
+			sf::RectangleShape overlay(slot->GetSprite().getGlobalBounds().getSize());
+			overlay.setPosition(slot->GetPosition());
+			overlay.setOrigin(slot->GetSprite().getOrigin());
+
+			float alpha = (std::sin(highlightTime) * 0.5f + 0.5f) * 200.f; // 최대 200의 알파
+			overlay.setFillColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(alpha)));
+
+			window.draw(overlay);
 		}
-		
+
+
+		//std::cout << "Slot Count: " << slots.size() << std::endl; // 여기!
 	}
+
+
 }
 
 void Storage::SetPosition(const sf::Vector2f& pos)
@@ -129,7 +149,7 @@ void Storage::SetOrigin(Origins preset)
 	GameObject::SetOrigin(preset);
 	if (preset != Origins::Custom)
 	{
-		Utils::SetOrigin(inventorybg,preset);
+		Utils::SetOrigin(inventorybg, preset);
 	}
 
 }

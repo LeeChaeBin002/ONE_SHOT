@@ -8,6 +8,8 @@ protected:
     sf::Sprite inventorybg;
     std::vector<SpriteGo*> slots;
     int selectedIndex = 0;
+    float highlightTime = 0.f;
+    float highlightSpeed = 3.f;
 
 public:
 
