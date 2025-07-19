@@ -35,7 +35,7 @@ void cellar2::Init()
     AddGameObject(cellar2Bg);
 
     TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-    go->SetString("cellar2");
+    go->SetString("");
     go->SetCharacterSize(30);
     go->SetFillColor(sf::Color::White);
     go->SetPosition({ 20.f, 0.f });

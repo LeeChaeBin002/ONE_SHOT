@@ -29,7 +29,7 @@ void Stage1::Init()
     AddGameObject(Stage1Bg);
 
     TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-    go->SetString("Stage1");
+    go->SetString("");
     go->SetCharacterSize(30);
     go->SetFillColor(sf::Color::White);
     go->sortingLayer = SortingLayers::UI;
@@ -54,7 +54,7 @@ void Stage1::Init()
 
     introImage = new SpriteGo("graphics/Pictures/intro.jpg", "IntroImage");
     introImage->SetOrigin(Origins::MC);
-    introImage->SetPosition({ FRAMEWORK.GetWindowSizeF().x * 0.5f, FRAMEWORK.GetWindowSizeF().y - 780.f }); // 화면 아래 시작
+    introImage->SetPosition({ FRAMEWORK.GetWindowSizeF().x * 0.5f, FRAMEWORK.GetWindowSizeF().y - 750.f }); // 화면 아래 시작
     AddGameObject(introImage);
 
     Scene::Init();
@@ -63,6 +63,7 @@ void Stage1::Init()
 void Stage1::Enter()
 {
     Scene::Enter();
+    MUSIC_MGR.StopBGM();
 
     introState = IntroState::WaitingToStart;
     introTimer = 0.f;
@@ -123,6 +124,7 @@ void Stage1::Update(float dt)
             introState = IntroState::Finished;
             if (introImage)
                 introImage->SetActive(false);
+            MUSIC_MGR.PlayBGM("Audio/BGM/Phosphor_slow.wav");
         }
         break;
 

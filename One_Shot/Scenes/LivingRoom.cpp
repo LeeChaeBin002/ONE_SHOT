@@ -74,7 +74,7 @@ void LivingRoom::Init()
     AddGameObject(LivingBg);
     
     TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-    go->SetString("Living Room");
+    go->SetString("");
     go->SetCharacterSize(30);
     go->SetFillColor(sf::Color::White);
     go->sortingLayer = SortingLayers::UI;

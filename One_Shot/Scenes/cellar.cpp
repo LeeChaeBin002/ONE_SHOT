@@ -33,7 +33,7 @@ void cellar::Init()
     AddGameObject(cellarBg);
 
     TextGo* go = new TextGo("fonts/TerminusTTF-Bold.ttf");
-    go->SetString("cellar");
+    go->SetString("");
     go->SetCharacterSize(30);
     go->SetFillColor(sf::Color::White);
     //go->SetOrigin(Origins::TL); // Ãß°¡

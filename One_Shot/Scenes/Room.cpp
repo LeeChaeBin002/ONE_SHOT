@@ -388,7 +388,7 @@ void Room::Draw(sf::RenderWindow& window)
 	if (messageText != nullptr && messageText->GetActive())
 	{
 		messageText->Draw(window);
-		std::cout << "messageText 그리는 중: " << messageText->GetString() << std::endl;
+		
 	}
 	// instruction 그리기
 	if (isShowingInstruction && instructionIndex < instructions.size())
@@ -465,7 +465,7 @@ void Room::ShowMessage(const std::string& msg)
 	{
 		messageText->SetString(msg);
 		messageText->SetActive(true);
-		std::cout << "ShowMessage: " << msg << " 활성화" << std::endl;
+		//std::cout << "ShowMessage: " << msg << " 활성화" << std::endl;
 	}
 }
 void Room::Exit()
