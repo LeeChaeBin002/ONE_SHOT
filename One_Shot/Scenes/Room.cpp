@@ -4,6 +4,8 @@
 #include "SpriteGo.h"
 #include "SoundMgr.h"
 #include "Storage.h"
+#include "SceneBase.h"
+#include "GameState.h"
 #pragma execution_character_set("utf-8")
 
 
@@ -14,9 +16,17 @@ Room::Room() : Scene(SceneIds::Room)
 
 void Room::Init()
 {
+	storage = &Storage::Instance();
+
+	if (!storage->IsInitialized())
+	{
+		storage->Init();
+		storage->SetActive(false);
+		storage->Reset();
+	}
+	AddGameObject(storage);
+
 	
-	texIds.push_back("graphics/Menus/Storage.png");
-	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
 	storage->onItemSelected = [this](int index)
 		{
 			RemoveSelectedIcon();
@@ -127,6 +137,15 @@ void Room::Init()
 	Scene::Init();
 	storage->SetActive(false);
 	storage->Reset();
+
+	messageText = new TextGo("fonts/TerminusTTF-Bold.ttf");
+	messageText->Init();
+	messageText->SetCharacterSize(24);
+	messageText->SetFillColor(sf::Color::White);
+	messageText->SetPosition({ 50.f, 50.f });
+	messageText->sortingLayer = SortingLayers::UI;
+	messageText->sortingOrder = 1;
+	AddGameObject(messageText);
 }
 void Room::Enter()
 {
@@ -187,6 +206,10 @@ void Room::Enter()
 				player->ApplyStateTexture(); 
 			}
 		}
+	}
+	for (const auto& itemPath : GameState::inventoryItems)
+	{
+		storage->AddItem(itemPath);
 	}
 
 	for (auto obj : gameObjects)
@@ -261,10 +284,6 @@ void Room::Update(float dt)
 	Scene::Update(dt);
 	if (!player) return;
 
-
-	Scene::Update(dt);
-	if (!player) return;
-
 	sf::Vector2f playerPos = player->GetPosition();
 	// 컴퓨터 앞 위치 범위 (약간의 오차 허용)
 	if (playerPos.x >= 230 && playerPos.x <= 270 &&
@@ -276,6 +295,7 @@ void Room::Update(float dt)
 			SCENE_MGR.ChangeScene(SceneIds::Computer);
 		}
 	}
+
 	if (!positionSet)
 	{
 		for (auto obj : gameObjects)
@@ -297,12 +317,23 @@ void Room::Update(float dt)
 	if (hasRemote)
 	{
 		sf::Vector2f playerPos = player->GetPosition();
-		if (playerPos.x >= 390 && playerPos.x <= 444 &&
-			playerPos.y >= 160 && playerPos.y <= 163)
+		if (playerPos.x >= 380 && playerPos.x <= 450 &&
+			playerPos.y >= 150 && playerPos.y <= 170)
 		{
+			std::cout << "ShowMessage called, hasRemote: " << hasRemote << std::endl;
 			ShowMessage("hint:2817");
 		}
 		
+	}
+	if (hasRemote && storage != nullptr && !remoteAddedToStorage)
+	{
+		storage->AddItem("graphics/Icons/item_start_remote.png");
+		//GameState::inventoryItems.push_back("graphics/Icons/item_start_remote.png");  // 추가!
+		if (storage->onItemSelected)
+		{
+			storage->onItemSelected(storage->GetCurrentSlotIndex() - 1);  // 방금 추가한 슬롯
+		}
+		remoteAddedToStorage = true;
 	}
 
 	if (canAccessLivingRoom && InputMgr::GetKeyDown(sf::Keyboard::Z))
@@ -339,7 +370,7 @@ void Room::Draw(sf::RenderWindow& window)
 			std::cerr << "Draw 예외 발생: " << obj << std::endl;
 		}
 	}
-	if (selectedIcon != nullptr && selectedIcon->GetActive())
+	if (selectedIcon && selectedIcon->GetActive())
 	{
 		//std::cout << "selectedIcon 그리는 중!" << std::endl;
 		selectedIcon->Draw(window);
@@ -357,6 +388,7 @@ void Room::Draw(sf::RenderWindow& window)
 	if (messageText != nullptr && messageText->GetActive())
 	{
 		messageText->Draw(window);
+		std::cout << "messageText 그리는 중: " << messageText->GetString() << std::endl;
 	}
 	// instruction 그리기
 	if (isShowingInstruction && instructionIndex < instructions.size())
@@ -409,12 +441,18 @@ void Room::CheckItempickup()
 			{
 				obj->SetActive(false); // 아이템 비활성화
 				hasRemote = true;
-				std::cout << "item1 get!" << std::endl;
+				//remoteAddedToStorage = true;
+				std::cout << "item1 get! hasRemoste" <<hasRemote<< std::endl;
 
-				if (storage != nullptr)
+				std::string itemPath = "graphics/Icons/item_start_remote.png";
+				if (std::find(GameState::inventoryItems.begin(), GameState::inventoryItems.end(), itemPath) == GameState::inventoryItems.end())
 				{
-					storage->AddItem("graphics/Icons/item_start_remote.png");
-					
+				GameState::inventoryItems.push_back("graphics/Icons/item_start_remote.png");
+				}
+				if (storage != nullptr && !remoteAddedToStorage)
+				{
+					storage->AddItem(itemPath);
+					remoteAddedToStorage = true;
 				};
 			}
 		}
@@ -426,12 +464,16 @@ void Room::ShowMessage(const std::string& msg)
 	if (messageText)
 	{
 		messageText->SetString(msg);
+		messageText->SetActive(true);
+		std::cout << "ShowMessage: " << msg << " 활성화" << std::endl;
 	}
 }
 void Room::Exit()
 {
 	
 }
+
+
 
 void Room::RemoveSelectedIcon()
 {
@@ -446,6 +488,7 @@ void Room::RemoveSelectedIcon()
             {
                 delete *it;
                 it = gameObjects.erase(it);
+				break;
             }
             else
             {
@@ -457,3 +500,5 @@ void Room::RemoveSelectedIcon()
 		
     }
 }
+
+

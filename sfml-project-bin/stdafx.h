@@ -31,11 +31,13 @@
 #include "Framework.h"
 #include "AniPlayer.h"
 #include "MusicMgr.h"
+#include "SceneBase.h"
+#include "Storage.h"
+#include "GameState.h"
 // SCENES
 
 #include "Mode.h"
 #include "Title.h"
 #include "Room.h"
-
 #include "Stage1.h"
 

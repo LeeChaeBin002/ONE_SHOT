@@ -21,7 +21,7 @@ protected:
     bool ShowedWindowMsg = false;
 	Storage* storage=nullptr;
     bool trigger = false;
-  
+    bool  remoteAddedToStorage = false;
     TextGo* messageText = nullptr;
     bool canAccessLivingRoom = false;
     sf::Sound instructionEffect;

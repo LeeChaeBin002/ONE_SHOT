@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\SceneBase.cpp" />
     <ClCompile Include="Scenes\building.cpp" />
     <ClCompile Include="Scenes\cellar2.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -175,9 +176,10 @@
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="Framework\Variables.cpp" />
     <ClCompile Include="Scenes\Title.cpp" />
-    <ClCompile Include="Storage.cpp" />
+    <ClCompile Include="Framework\Storage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\SceneBase.h" />
     <ClInclude Include="Scenes\building.h" />
     <ClInclude Include="Scenes\cellar2.h" />
     <ClInclude Include="GameState.h" />
@@ -204,7 +206,7 @@
     <ClInclude Include="Framework\SceneMgr.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
     <ClInclude Include="Scenes\Stage1.h" />
-    <ClInclude Include="Storage.h" />
+    <ClInclude Include="Framework\Storage.h" />
     <CopyFileToFolders Include="stdafx.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </CopyFileToFolders>

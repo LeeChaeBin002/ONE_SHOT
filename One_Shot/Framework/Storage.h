@@ -11,17 +11,21 @@ protected:
     int selectedSlotIndex = 0;
     float highlightTime = 0.f;
     float highlightSpeed = 3.f;
-    
+    bool initialized = false;
   
 public:
+   
     std::vector<bool> slotHasItem;
     std::vector<bool> slotHasOverlay;
     std::function<void(int)> onItemSelected;
     std::function<void()> onRemoveSelectedIcon;
+
+    std::vector<std::string> slotItemPaths;
     std::vector<SpriteGo*> slots;
     std::string texId;
+    std::string GetItemIconPath(int index) const;
     static Storage& Instance();
-
+    bool IsInitialized() const { return initialized; }
     Storage(const std::string name = "Storage");
     ~Storage() override = default;
     void Init() override;
@@ -41,5 +45,7 @@ public:
     void SetOrigin(Origins preset) override;
     void AddItem(const std::string& texPath);
     void TriggerSelect();
+    void ClearItems();
+    int GetCurrentSlotIndex() const;
 };
 

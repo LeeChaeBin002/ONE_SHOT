@@ -1,12 +1,58 @@
 ﻿#include "stdafx.h"
 #include "livingRoom.h"
 #include "SpriteGo.h"
+#include "Storage.h"
 
 LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
 {
 }
 void LivingRoom::Init()
 {
+    storage = &Storage::Instance();
+    if (!storage->IsInitialized()) // Init이 두 번 실행 안되게
+    {
+        storage->Init();
+        storage->SetActive(false);
+        storage->Reset();
+    }
+    AddGameObject(storage);
+    
+
+    storage->onRemoveSelectedIcon = [this]()
+        {
+            RemoveSelectedIcon();
+            
+        };
+    storage->onItemSelected = [this](int index)
+        {
+            if (selectedIcon != nullptr && selectedIcon->GetActive())
+            {
+                RemoveSelectedIcon();
+            }
+            std::string iconPath = storage->GetItemIconPath(index);
+            if (iconPath.empty())
+            {
+                std::cout << "해당 슬롯에 아이템 없음 (하단 아이콘 표시 안함)" << std::endl;
+                return;
+            }
+
+            if (!TEXTURE_MGR.Exists(iconPath))
+            {
+                TEXTURE_MGR.Load(iconPath);
+            }
+
+            SpriteGo* icon = new SpriteGo(iconPath, "RemoteIcon");
+            icon->GetSprite().setTexture(TEXTURE_MGR.Get(iconPath));
+            sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
+            icon->SetPosition({ windowSize.x - 50.f, windowSize.y - 50.f });
+            icon->SetScale({ 1.5f, 1.5f });
+            icon->SetOrigin(Origins::MC);
+            icon->SetActive(true);
+            AddGameObject(icon);
+            selectedIcon = icon;
+        };
+    
+    
     soundIds.push_back("Audio/BGM/SomeplaceIKnow.ogg");
     texIds.push_back("graphics/Tilesets/living_room.png");
     texIds.push_back("graphics/Characters/niko.png");
@@ -57,7 +103,14 @@ void LivingRoom::Init()
 void LivingRoom::Enter()
 {
     Scene::Enter();
-
+    if (storage->GetCurrentSlotIndex() != 0) // 이미 아이템이 있으면 초기화
+    {
+        storage->ClearItems();
+        for (const auto& itemPath : GameState::inventoryItems)
+        {
+            storage->AddItem(itemPath);
+        }
+    }
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
 
@@ -74,6 +127,17 @@ void LivingRoom::Enter()
 
 void LivingRoom::Update(float dt)
 {
+    if(InputMgr::GetKeyDown(sf::Keyboard::S))
+    {
+        bool active = storage->GetActive();
+        storage->SetActive(!active);
+        std::cout << "Storage Active: " << !active << std::endl;
+    }
+    if (storage && storage->GetActive())
+    {
+        storage->Update(dt);
+        return;
+    }
 
     if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
     {
@@ -153,17 +217,42 @@ void LivingRoom::Update(float dt)
 void LivingRoom::Draw(sf::RenderWindow& window)
 {
     Scene::Draw(window); // Scene이 알아서 worldView, uiView, gameObjects draw
+   
+    if (storage && storage->GetActive())
+    {
+        storage->Draw(window);
+    }
 
     if (messageText && messageText->GetActive())
     {
         messageText->Draw(window);
+    }
+
+    if (selectedIcon != nullptr && selectedIcon->GetActive())
+    {
+        selectedIcon->Draw(window);
     }
 }
     
 
 void LivingRoom::Release()
 {
-  
+    if (storage != nullptr)
+    {
+        for (auto it = gameObjects.begin(); it != gameObjects.end(); )
+        {
+            if (*it == storage)
+            {
+                delete* it;
+                it = gameObjects.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+        storage = nullptr;
+    }
 }
 
 void LivingRoom::ShowMessage(const std::string& msg)
@@ -178,4 +267,24 @@ void LivingRoom::Exit()
     bgm.stop(); // 음악 정지
     positionSet = false;
     Scene::Exit(); // 부모 클래스 Exit 호출 (리소스 언로드 등)
+}
+void LivingRoom::RemoveSelectedIcon()
+{
+    if (selectedIcon)
+    {
+        selectedIcon->SetActive(false);
+        for (auto it = gameObjects.begin(); it != gameObjects.end(); )
+        {
+            if (*it == selectedIcon)
+            {
+                delete* it;
+                it = gameObjects.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+        selectedIcon = nullptr;
+    }
 }

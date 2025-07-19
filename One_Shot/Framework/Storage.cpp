@@ -6,6 +6,14 @@ Storage::Storage(const std::string name) :GameObject(name)
 {
 
 }
+std::string Storage::GetItemIconPath(int index) const
+{
+	if (index < 0 || index >= slotItemPaths.size())
+	{
+		return "";
+	}
+	return slotItemPaths[index];
+}
 Storage& Storage::Instance()
 {
 	static Storage instance("Storage");
@@ -13,6 +21,8 @@ Storage& Storage::Instance()
 }
 void Storage::Init()//씬당 한번씩
 {
+	if (initialized) return;
+
 	sortingLayer = SortingLayers::UI;
 	sortingOrder = 0;
 	texId = "graphics/Menus/Storage.png";
@@ -42,8 +52,12 @@ void Storage::Init()//씬당 한번씩
 		slotHasItem.push_back(false);
 		slots.push_back(slot);
 	}
-
+	for (const auto& itemPath : GameState::inventoryItems)
+	{
+		AddItem(itemPath);  // 기존에 구현한 AddItem 사용
+	}
 	SetPosition({ 0.f, 0.f });  // 반드시 슬롯 위치를 다시 배치
+	initialized = true;
 }
 
 void Storage::Release()
@@ -216,6 +230,10 @@ void Storage::AddItem(const std::string& texPath)
 			return;
 		}
 	}
+	if (std::find(GameState::inventoryItems.begin(), GameState::inventoryItems.end(), texPath) == GameState::inventoryItems.end())
+	{
+		GameState::inventoryItems.push_back(texPath);
+	}
 	if (currentSlotIndex >= slots.size())
 	{
 		std::cout << "No empty slot available" << std::endl;
@@ -223,20 +241,18 @@ void Storage::AddItem(const std::string& texPath)
 	}
 	slots[currentSlotIndex]->GetSprite().setTexture(TEXTURE_MGR.Get(texPath));
 	slotHasItem[currentSlotIndex] = true;
+	// 아이템 경로 저장
+	if (slotItemPaths.size() <= currentSlotIndex)
+	{
+		slotItemPaths.resize(slots.size());
+	}
+	slotItemPaths[currentSlotIndex] = texPath;
 
 	selectedIndex = currentSlotIndex;
 	selectedSlotIndex = currentSlotIndex;
 	slotHasOverlay[currentSlotIndex] = true;
 
-	if (onItemSelected)
-	{
-		std::cout << "onItemSelected 호출됨! index: " << currentSlotIndex << std::endl;
-		onItemSelected(currentSlotIndex);
-	}
-	else
-	{
-		std::cout << "onItemSelected가 nullptr임" << std::endl;
-	}
+	
 
 	currentSlotIndex++;
 	
@@ -251,4 +267,29 @@ void Storage::TriggerSelect()
 			onItemSelected(i);
 		}
 	}
+}
+
+void Storage::ClearItems()
+{
+	currentSlotIndex = 0;
+	selectedIndex = 0;
+	selectedSlotIndex = -1;
+	for (size_t i = 0; i < slots.size(); ++i)
+	{
+		std::string emptySlotPath = "graphics/Menus/empty_slot" + std::to_string(i + 1) + ".png";
+		if (!TEXTURE_MGR.Exists(emptySlotPath))
+		{
+			TEXTURE_MGR.Load(emptySlotPath);
+		}
+
+		slots[i]->GetSprite().setTexture(TEXTURE_MGR.Get(emptySlotPath));
+		slotHasItem[i] = false;
+		slotHasOverlay[i] = false;
+	}
+	slotItemPaths.clear();
+}
+
+int Storage::GetCurrentSlotIndex() const
+{
+	return currentSlotIndex;
 }
