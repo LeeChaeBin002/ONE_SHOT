@@ -2,7 +2,8 @@
 #include "Stage1.h"
 #include "SpriteGo.h"
 
-Stage1::Stage1():Scene(SceneIds::Stage1)
+Stage1::Stage1():Scene(SceneIds::Stage1), introState(IntroState::WaitingToStart),
+introTimer(0.f)
 {
     
 }
@@ -51,6 +52,10 @@ void Stage1::Init()
     player->Reset();
     AddGameObject(player);
 
+    introImage = new SpriteGo("graphics/Pictures/intro.jpg", "IntroImage");
+    introImage->SetOrigin(Origins::MC);
+    introImage->SetPosition({ FRAMEWORK.GetWindowSizeF().x * 0.5f, FRAMEWORK.GetWindowSizeF().y - 780.f }); // 화면 아래 시작
+    AddGameObject(introImage);
 
     Scene::Init();
 
@@ -58,7 +63,11 @@ void Stage1::Init()
 void Stage1::Enter()
 {
     Scene::Enter();
-    PlayBGMIfAllowed();
+
+    introState = IntroState::WaitingToStart;
+    introTimer = 0.f;
+    introFinished = false;
+   
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
 
@@ -74,55 +83,97 @@ void Stage1::Enter()
 }
 void Stage1::Update(float dt)
 {
-    if (worldView.getSize().x == 0 || worldView.getSize().y == 0)
+    const float targetY = -60.f + (introImage->GetGlobalBounds().height * 0.5f);
+    switch (introState)
     {
-        return;
-    }
-    // 마우스 위치를 world 좌표로 변환
-    sf::Vector2i mousePixelPos = sf::Mouse::getPosition(FRAMEWORK.GetWindow());
-    sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePixelPos, worldView);
-
-
-    if (!player) return;
-
-
-    // 월드 좌표를 문자열로 표시
-    std::ostringstream oss;
-    oss << "Mouse World Pos: (" << mouseWorldPos.x << ", " << mouseWorldPos.y << ")";
-    messageText->SetString(oss.str());
-
-    // 예시: 플레이어 따라 worldView 이동
-    sf::Vector2f playerPos = player->GetPosition();
-    worldView.setCenter(playerPos);
-
-    //밖으로 나가기(수정)
-    if (playerPos.x >= 170 && playerPos.x <= 200 &&
-        playerPos.y >= 150 && playerPos.y <= 200)
-    {
-        if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+    case IntroState::WaitingToStart:
+            introTimer += dt;
+            if (introTimer >= 1.f) // 2초 대기 후 시작
+            {
+                introState = IntroState::Playing;
+                introTimer = 0.f;
+            }
+            break;
+    case IntroState::Playing:
+        if (introImage)
         {
+            sf::Vector2f pos = introImage->GetPosition();
 
-            SCENE_MGR.ChangeScene(SceneIds::building);
+            if (pos.y < targetY)
+            {
+                pos.y += 120.f * dt; // 위로 이동
+
+                // 목표 위치보다 더 넘어가지 않게 제한
+                if (pos.y > targetY)
+                    pos.y = targetY;
+                introImage->SetPosition(pos);
+
+            }
+            else
+            {
+                introState = IntroState::WaitingAfterEnd;
+                introTimer = 0.f;
+            }
         }
+        break;
+    case IntroState::WaitingAfterEnd:
+        introTimer += dt;
+        if (introTimer >= 1.f)
+        {
+            introState = IntroState::Finished;
+            if (introImage)
+                introImage->SetActive(false);
+        }
+        break;
+
+    case IntroState::Finished:
+        if (!player) return;
+        player->Update(dt);
+
+        // 마우스 위치를 world 좌표로 변환
+        sf::Vector2i mousePixelPos = sf::Mouse::getPosition(FRAMEWORK.GetWindow());
+        sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(mousePixelPos, worldView);
+
+        // 월드 좌표를 문자열로 표시
+        std::ostringstream oss;
+        oss << "Mouse World Pos: (" << mouseWorldPos.x << ", " << mouseWorldPos.y << ")";
+        messageText->SetString(oss.str());
+
+        // 예시: 플레이어 따라 worldView 이동
+        sf::Vector2f playerPos = player->GetPosition();
+        worldView.setCenter(playerPos);
+
+        //밖으로 나가기(수정)
+        if (playerPos.x >= 170 && playerPos.x <= 200 &&
+            playerPos.y >= 150 && playerPos.y <= 200)
+        {
+            if (InputMgr::GetKeyDown(sf::Keyboard::Z))
+            {
+
+                SCENE_MGR.ChangeScene(SceneIds::building);
+            }
+        }
+
+        if (!positionSet)
+        {
+            if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
+            {
+                // 밖에서 온 경우
+                player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 250.f });
+            }
+            else
+            {
+                // 안에서 온 경우
+                player->SetPosition({ 308.f, 180.f });
+            }
+            positionSet = true;
+        }
+        break;
+        }
+
     }
 
-    if (!positionSet)
-    {
-        if (SCENE_MGR.GetPreviousScene() == SceneIds::cellar)
-        {
-            // 밖에서 온 경우
-            player->SetPosition({ /* 지하실 문 앞 좌표 예시 */ 720.f, 250.f });
-        }
-        else
-        {
-            // 안에서 온 경우
-            player->SetPosition({ 308.f, 180.f });
-        }
-        positionSet = true;
-    }
-    player->Update(dt);
 
-}
 void Stage1::Draw(sf::RenderWindow& window)
 {
     Scene::Draw(window); // Scene이 알아서 worldView, uiView, gameObjects draw
@@ -134,7 +185,11 @@ void Stage1::Draw(sf::RenderWindow& window)
 }
 void Stage1::Release()
 {
-
+    if (introImage)
+    {
+        delete introImage;
+        introImage = nullptr;
+    }
 }
 void Stage1::ShowMessage(const std::string& msg)
 {
@@ -150,4 +205,8 @@ void Stage1::Exit()
     positionSet = false;
     Scene::Exit(); 
 
+}
+void Stage1::InitAnimation()
+{
+    
 }
