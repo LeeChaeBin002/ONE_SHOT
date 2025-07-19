@@ -36,7 +36,10 @@ void Room::Init()
 			std::cout << "selectedIcon 텍스처 size: "
 				<< tex.getSize().x << ", " << tex.getSize().y << std::endl;
 			// 기존 아이콘 있으면 삭제
-
+			storage->onRemoveSelectedIcon = [this]()
+				{
+					RemoveSelectedIcon();
+				};
 			if (selectedIcon != nullptr)
 			{
 				selectedIcon->SetActive(false);

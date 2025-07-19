@@ -17,6 +17,7 @@ public:
     std::vector<bool> slotHasItem;
     std::vector<bool> slotHasOverlay;
     std::function<void(int)> onItemSelected;
+    std::function<void()> onRemoveSelectedIcon;
     std::vector<SpriteGo*> slots;
     std::string texId;
     static Storage& Instance();

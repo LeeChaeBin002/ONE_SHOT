@@ -108,9 +108,19 @@ void Storage::Update(float dt)
 			slotHasOverlay[selectedSlotIndex] = true;
 		}
 
-		if (onItemSelected)
+		if (slotHasItem[selectedIndex])
 		{
-			onItemSelected(selectedIndex);
+			if (onItemSelected)
+			{
+				onItemSelected(selectedIndex);
+			}
+		}
+		else
+		{
+			if (onRemoveSelectedIcon)
+			{
+				onRemoveSelectedIcon();  // 빈 슬롯 선택 시 아이콘 제거
+			}
 		}
 	}
 }
