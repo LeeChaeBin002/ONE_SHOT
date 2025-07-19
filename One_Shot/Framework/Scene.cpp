@@ -94,6 +94,7 @@ void Scene::Draw(sf::RenderWindow& window)
 
 		if (obj->GetActive())
 		{
+			if (obj == nullptr) continue;
 			obj->Draw(window);
 		}
 	}
@@ -111,16 +112,21 @@ void Scene::ApplyPendingChanges()
 	}
 	objectsToAdd.clear();
 
-	for (GameObject* go : objectsToRemove)
+	for (auto it = gameObjects.begin(); it != gameObjects.end(); )
 	{
-		gameObjects.remove(go);
-		if (go != nullptr)
+		GameObject* go = *it;
+		if (std::find(objectsToRemove.begin(), objectsToRemove.end(), go) != objectsToRemove.end())
 		{
 			go->Release();
 			delete go;
+			it = gameObjects.erase(it); // 안전하게 삭제 후 다음
+		}
+		else
+		{
+			++it;
 		}
 	}
-	objectsToRemove.clear();
+
 }
 
 GameObject* Scene::AddGameObject(GameObject* go)

@@ -4,6 +4,21 @@
 SpriteGo::SpriteGo(const std::string& texPlayerId, const std::string& name)
 	: GameObject(name), textureId(texPlayerId)
 {
+	if (TEXTURE_MGR.Exists(texPlayerId))
+	{
+		sprite.setTexture(TEXTURE_MGR.Get(texPlayerId));
+	}
+	else
+	{
+		if (TEXTURE_MGR.Load(texPlayerId))
+		{
+			sprite.setTexture(TEXTURE_MGR.Get(texPlayerId));
+		}
+		else
+		{
+			std::cerr << "SpriteGo 생성: 텍스처 로드 실패 " << texPlayerId << std::endl;
+		}
+	}
 }
 
 void SpriteGo::SetPosition(const sf::Vector2f& pos)

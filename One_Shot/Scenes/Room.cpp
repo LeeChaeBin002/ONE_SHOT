@@ -19,6 +19,8 @@ void Room::Init()
 	storage = (Storage*)AddGameObject(new Storage("graphics/Menus/Storage.png"));
 	storage->onItemSelected = [this](int index)
 		{
+			RemoveSelectedIcon();
+			std::cout << "Room에서 onItemSelected 호출됨 index: " << index << std::endl;
 			// 오른쪽 아래에 아이콘 생성
 			std::string iconPath = "graphics/Icons/item_start_remote.png";
 			if (!TEXTURE_MGR.Exists(iconPath))
@@ -29,7 +31,12 @@ void Room::Init()
 					return;
 				}
 			}
+			const sf::Texture& tex = TEXTURE_MGR.Get(iconPath);
+
+			std::cout << "selectedIcon 텍스처 size: "
+				<< tex.getSize().x << ", " << tex.getSize().y << std::endl;
 			// 기존 아이콘 있으면 삭제
+
 			if (selectedIcon != nullptr)
 			{
 				selectedIcon->SetActive(false);
@@ -37,13 +44,21 @@ void Room::Init()
 				delete selectedIcon;
 				selectedIcon = nullptr;
 			}
-			SpriteGo* icon = new SpriteGo(iconPath);
+			SpriteGo* icon = new SpriteGo(iconPath,"RemoteIcon");
+			sf::Texture& texPlayerId = TEXTURE_MGR.Get(iconPath);
+			icon->GetSprite().setTexture(texPlayerId);
 			sf::Vector2f windowSize = FRAMEWORK.GetWindowSizeF();
-			icon->SetPosition({ windowSize.x - 50.f, windowSize.y - 50.f }); // 오른쪽 아래
+			icon->SetPosition({ windowSize.x -50.f, windowSize.y - 50.f }); // 오른쪽 아래
 			icon->SetScale({ 1.5f, 1.5f });
 			icon->SetOrigin(Origins::MC);
+			//icon->SetPosition({ 300.f, 200.f });
+			icon->SetActive(true);
 			AddGameObject(icon);
 			selectedIcon = icon;
+
+			std::cout << "selectedIcon Position: "
+				<< selectedIcon->GetPosition().x << ", "
+				<< selectedIcon->GetPosition().y << std::endl;
 		};
 	
 	
@@ -54,23 +69,30 @@ void Room::Init()
 	// instruction 이미지 로드
 	for (int i = 1; i <= 4; ++i)
 	{
-		std::string texPath = "graphics/Pictures/ko/instruction" + std::to_string(i)+".png";
+		std::string texPath = "graphics/Pictures/ko/instruction" + std::to_string(i) + ".png";
+
+		if (!TEXTURE_MGR.Exists(texPath))
+		{
+			if (!TEXTURE_MGR.Load(texPath))
+			{
+				std::cerr << "Failed to load instruction texture: " << texPath << std::endl;
+				continue;
+			}
+		}
+
 		SpriteGo* instruction = new SpriteGo(texPath);
-		instruction->SetPosition({ FRAMEWORK.GetWindowSizeF().x * 0.5f, FRAMEWORK.GetWindowSizeF().y * 0.5f });
-		instruction->SetOrigin(Origins::MC);
-		if (!TEXTURE_MGR.Load(texPath))
-		{
-			std::cerr << "Failed to load instruction texture: " << texPath << std::endl;
-		}
-		else
-		{
-			auto texture = TEXTURE_MGR.Get(texPath);
-			instruction->GetSprite().setTexture(texture);
-			float scaleX = FRAMEWORK.GetWindowSizeF().x / texture.getSize().x;
-			float scaleY = FRAMEWORK.GetWindowSizeF().y / texture.getSize().y;
-			instruction->SetScale({ scaleX, scaleY });
-		}
-		instruction->SetActive(false); // 처음에는 안 보이게
+		instruction->SetOrigin(Origins::MC); // 이미지 중심 기준
+		instruction->SetPosition(FRAMEWORK.GetWindowSizeF() * 0.5f); // 화면 중심
+
+		const sf::Texture& texture = TEXTURE_MGR.Get(texPath);
+
+		float scaleX = FRAMEWORK.GetWindowSizeF().x / texture.getSize().x;
+		float scaleY = FRAMEWORK.GetWindowSizeF().y / texture.getSize().y;
+
+		float scale = std::min(scaleX, scaleY); // 창 크기 기준 80% 크기
+		instruction->SetScale({ scale, scale });
+
+		instruction->SetActive(false); // 처음엔 비활성
 		AddGameObject(instruction);
 		instructions.push_back(instruction);
 	}
@@ -296,16 +318,29 @@ void Room::Update(float dt)
 
 void Room::Draw(sf::RenderWindow& window)
 {
-	// �⺻ �� ����
+
 	auto defaultView = window.getView();
 
 	window.setView(worldView);
 
 	for (auto obj : gameObjects)
 	{
-		obj->Draw(window);
+		if (obj == nullptr) continue;
+		//std::cout << "Drawing object: " << obj << ", name: " << obj->GetName() << std::endl;
+		try
+		{
+			obj->Draw(window);
+		}
+		catch (...)
+		{
+			std::cerr << "Draw 예외 발생: " << obj << std::endl;
+		}
 	}
-	
+	if (selectedIcon != nullptr && selectedIcon->GetActive())
+	{
+		//std::cout << "selectedIcon 그리는 중!" << std::endl;
+		selectedIcon->Draw(window);
+	}
 
 	// UI �׸���
 	window.setView(uiView);
@@ -333,7 +368,20 @@ void Room::Release()
 {
 	if (storage != nullptr)
 	{
-		delete storage;
+		// gameObjects에서도 제거
+		for (auto it = gameObjects.begin(); it != gameObjects.end(); )
+		{
+			if (*it == storage)
+			{
+				delete* it;
+				it = gameObjects.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+
 		storage = nullptr;
 	}
 }
@@ -385,10 +433,24 @@ void Room::Exit()
 void Room::RemoveSelectedIcon()
 {
 	if (selectedIcon)
-	{
-		selectedIcon->SetActive(false);
-		gameObjects.remove(selectedIcon);
-		delete selectedIcon;
-		selectedIcon = nullptr;
-	}
+    {
+        selectedIcon->SetActive(false);
+
+        // 안전하게 erase로 제거
+        for (auto it = gameObjects.begin(); it != gameObjects.end(); )
+        {
+            if (*it == selectedIcon)
+            {
+                delete *it;
+                it = gameObjects.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        selectedIcon = nullptr;
+		
+    }
 }

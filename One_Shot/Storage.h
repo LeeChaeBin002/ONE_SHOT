@@ -11,6 +11,7 @@ protected:
     int selectedSlotIndex = 0;
     float highlightTime = 0.f;
     float highlightSpeed = 3.f;
+    
   
 public:
     std::vector<bool> slotHasItem;
@@ -38,5 +39,6 @@ public:
     void SetOrigin(const sf::Vector2f& o) override;
     void SetOrigin(Origins preset) override;
     void AddItem(const std::string& texPath);
+    void TriggerSelect();
 };
 
