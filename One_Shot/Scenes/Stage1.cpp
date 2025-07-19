@@ -58,7 +58,7 @@ void Stage1::Init()
 void Stage1::Enter()
 {
     Scene::Enter();
-
+    PlayBGMIfAllowed();
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center{ size.x * 0.5f, size.y * 0.5f };
 
@@ -68,7 +68,7 @@ void Stage1::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-    //MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+    
     player->ApplyStateTexture();
     positionSet = false;
 }

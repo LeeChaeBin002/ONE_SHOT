@@ -40,7 +40,7 @@ public:
 	GameObject* FindGameObject(const std::string& name);
 	std::vector<GameObject*> FindGameObjects(const std::string& name);
 	void FindGameObjects(const std::string& name, std::vector<GameObject*>& results);
-
+	void PlayBGMIfAllowed();
 
 	sf::Vector2f ScreenToWorld(sf::Vector2i screenPos);
 	sf::Vector2i WorldToScreen(sf::Vector2f worldPos);

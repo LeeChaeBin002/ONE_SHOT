@@ -204,6 +204,19 @@ void Scene::FindGameObjects(const std::string& name, std::vector<GameObject*>& r
 	}
 }
 
+void Scene::PlayBGMIfAllowed()
+{
+	if (GameState::playerState != PlayerState::HoldingBulb)
+	{
+		MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+	}
+	else
+	{
+		MUSIC_MGR.StopBGM();
+	}
+}
+
+
 sf::Vector2f Scene::ScreenToWorld(sf::Vector2i screenPos)
 {
 	return FRAMEWORK.GetWindow().mapPixelToCoords(screenPos, worldView);
@@ -246,5 +259,6 @@ sf::Vector2f Scene::GetOutsidePosition(const std::string& direction, float offse
 		return { center.x, center.y + size.y / 2 + offset };
 	}
 
-	return center; 
+	return center;
 }
+

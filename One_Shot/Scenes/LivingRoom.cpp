@@ -2,6 +2,7 @@
 #include "livingRoom.h"
 #include "SpriteGo.h"
 #include "Storage.h"
+#include "SceneBase.h"
 
 LivingRoom::LivingRoom() : Scene(SceneIds::LivingRoom)
 {
@@ -103,6 +104,7 @@ void LivingRoom::Init()
 void LivingRoom::Enter()
 {
     Scene::Enter();
+    PlayBGMIfAllowed();
     if (storage->GetCurrentSlotIndex() != 0) // 이미 아이템이 있으면 초기화
     {
         storage->ClearItems();
@@ -120,7 +122,7 @@ void LivingRoom::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-    MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+    //MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
     player->ApplyStateTexture();
     positionSet = false;
 }

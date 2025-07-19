@@ -28,6 +28,6 @@ public:
 	void ShowMessage(const std::string& msg);
 	void Exit()override;
 	void RemoveSelectedIcon();
-
+	
 };
 

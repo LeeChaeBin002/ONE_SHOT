@@ -49,6 +49,7 @@ void SoundMgr::PlayBgm(std::string id, bool loop)
 
 void SoundMgr::PlayBgm(sf::SoundBuffer& buffer, bool loop)
 {
+	
 	bgm.stop();
 	bgm.setLoop(loop);
 	bgm.setBuffer(buffer);

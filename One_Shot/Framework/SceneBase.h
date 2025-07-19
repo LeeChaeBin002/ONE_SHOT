@@ -14,7 +14,7 @@ public:
     SceneBase(SceneIds id); 
     virtual ~SceneBase()=default;
     virtual void Draw(sf::RenderWindow& window) override;
-
+    
 
 };
 

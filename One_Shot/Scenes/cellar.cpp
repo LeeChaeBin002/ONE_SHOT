@@ -66,7 +66,7 @@ void cellar::Init()
 void cellar::Enter()
 {
     Scene::Enter();
-
+    PlayBGMIfAllowed();
     auto size = FRAMEWORK.GetWindowSizeF();
     sf::Vector2f center({ 335.f, 235.f });
     if (player && player->GetState() == PlayerState::HoldingBulb)
@@ -78,7 +78,7 @@ void cellar::Enter()
     worldView.setCenter(center);
 
     messageText->SetString("");
-    MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
+    //MUSIC_MGR.PlayBGM("Audio/BGM/SomeplaceIKnow.ogg");
 
     positionSet = false;
 

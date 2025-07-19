@@ -314,4 +314,17 @@ void cellar2::ChangePlayerState()
 
    
     std::cout << "애니메이션 종료 후 캐릭터 상태 변경" << std::endl;
+
+    //추가된 코드: 효과음 또는 특별 BGM 재생
+    std::string newMusic = "Audio/ME/major_puzzle_solved.wav";  // 원하는 효과음/짧은 BGM
+    if (!SOUNDBUFFER_MGR.Exists(newMusic))
+    {
+        SOUNDBUFFER_MGR.Load(newMusic);
+    }
+    bgm.setBuffer(SOUNDBUFFER_MGR.Get(newMusic));
+    bgm.setLoop(false); // 한번만 재생
+    bgm.play();
+
+    // 기존 BGM 정지
+    MUSIC_MGR.StopBGM();
 }
